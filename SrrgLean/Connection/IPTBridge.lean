@@ -33,7 +33,13 @@ def IsGlobalMaxViability {α : Type*} (M : GXtMorphism α) (s : α) : Prop :=
 /--
 **Main EPIC_046 bridge (sorry) — SPEC_046_Y8L [H1][H2][H4] bundle.**
 
-Premises to be decomposed in EPIC_047 `SrrgLean.Core` (no smuggling of IPT into `R`/`C`).
+Proof obligations (no smuggling of IPT into `R`/`C`):
+
+- **[H1]** morphism / channel — SPEC_046_Y8L §7, SPEC_046_R3K §7–10.
+- **[H2]** SRRG stationary / `IsGlobalMaxViability`—book δF=0 package; refine in EPIC_047 Core.
+- **[H4]** tangency ⇒ η = T(η); combine with **SPEC_046_Y8L** [H3] (`H9Bridge.ipt_landauer_map_fixed_point`).
+
+**EPIC_047:** replace `h_morphism`/`h_tangency : True` with real propositions in `SrrgLean.Core`.
 -/
 theorem efficiency_at_srrg_stationary_eq_ipt
     {α : Type*} (M : GXtMorphism α) (s : α) (hC : 0 < M.C s)
@@ -41,7 +47,7 @@ theorem efficiency_at_srrg_stationary_eq_ipt
     (h_stat : IsGlobalMaxViability M s)
     (h_tangency : True) :
     efficiencyRatio M s hC = certifiedIPT := by
-  -- TODO SPEC_047: expand h_morphism ([H1]), bundle δF=0 ([H2]), prove [H4] 1D reduction + H9 tangency.
+  -- SPEC_047 P1.T1–P1.T5 + Phase 2: discharge [H1][H2][H4] then compose with H9Bridge.
   sorry
 
 end SrrgLean.Connection

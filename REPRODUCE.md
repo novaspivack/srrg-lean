@@ -29,4 +29,4 @@ GitHub Actions (`.github/workflows/ci.yml`) runs the same two commands on `ubunt
 ## Paper / specs
 
 - Public paper draft target: **P27** (`papers/27_SRRG` on `ugp-physics`).
-- Internal formal specifications: EPIC_046 `MASTER_STATUS.md`, EPIC_047 `SPEC_047_SRL_SRRG_LEAN.md`.
+- Internal formal specifications: EPIC_046 `MASTER_STATUS.md`; **SPEC_046_R3K, Y8L, Q2N, Z9M, H4P**; EPIC_047 `SPEC_047_SRL_SRRG_LEAN.md`.
