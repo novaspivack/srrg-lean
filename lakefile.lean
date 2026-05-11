@@ -17,6 +17,7 @@ uses precompiled artifacts (no full Mathlib compile).
 package «srrg-lean» where
 
 require «ugp-physics-lean» from "../ugp-physics-lean"
+require «nems-lean» from "../nems-lean"
 
 @[default_target]
 lean_lib «SrrgLean» where
