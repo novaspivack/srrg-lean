@@ -9,8 +9,10 @@ This repo mirrors the layout of [`ugp-physics-lean`](https://github.com/novaspiv
 ## Status
 
 - **Phase 0 (bootstrap):** `SrrgLean.Connection.IPTBridge` states the main EPIC_046
-  bridge target with an explicit `sorry`; **GoldenPhiBridge** and **UOneBridge** are
-  already **zero-sorry** re-exports from `ugp-lean` / `ugp-physics-lean`.
+  bridge target with **one** explicit `sorry` (hypotheses [H1][H2][H4]).
+  **`H9Bridge`** certifies the Landauer fixed-point identity against `UgpLean.IPT.IPT_threshold`
+  at **zero sorry** ([H3]).
+  **GoldenPhiBridge** and **UOneBridge** are **zero-sorry** re-exports (A1 / circle exp).
 - Full architecture is specified in **`SPEC_047_SRL`** (EPIC_047) on the companion
   research archive; staged physics obligations are in **SPEC_046_R3K … SPEC_046_H4P**.
 

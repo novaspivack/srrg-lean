@@ -4,6 +4,7 @@
 -- and EPIC_047 `SPEC_047_SRL_SRRG_LEAN.md`.
 
 import SrrgLean.Connection.IPTBridge
+import SrrgLean.Connection.H9Bridge
 import SrrgLean.Connection.GoldenPhiBridge
 import SrrgLean.Connection.UOneBridge
 
