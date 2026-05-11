@@ -4,6 +4,17 @@ import SrrgLean.Core.ConstraintFunctional
 
 /-!
 # Core — Net viability F[S] = R[S] − C_Λ[S] (book §6.4)
+
+## Correspondence with viable-continuation-lean (SPEC_052_PRI §B1)
+
+`Viability P C s > 0` corresponds to `HasViability.Viable s` in viable-continuation-lean:
+- In viable-continuation-lean, `HasViability.Viable s` asserts that system state `s`
+  satisfies a viability predicate (the system can continue to exist under its constraints).
+- In srrg-lean, `Viability P C s > 0` means net representational capacity exceeds
+  constraint cost, i.e. `R[s] > C_Λ[s]` — the system has positive information-profit margin.
+- Both capture the same structural idea: a viable system is one whose resources exceed its
+  self-maintenance obligations. The SRRG formulation is quantitative (real-valued surplus);
+  viable-continuation-lean gives the propositional cut.
 -/
 
 namespace SrrgLean.Core

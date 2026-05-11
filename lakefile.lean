@@ -18,6 +18,10 @@ package «srrg-lean» where
 
 require «ugp-physics-lean» from "../ugp-physics-lean"
 require «nems-lean» from "../nems-lean"
+-- TODO (SPEC_052_PRI §B1): Add `require «viable-continuation-lean» from "../viable-continuation-lean"`
+-- once the transitive mathlib toolchain conflict is resolved:
+-- viable-continuation-lean pins mathlib @ v4.29.0-rc3 toolchain, while srrg-lean uses v4.29.0-rc6.
+-- Correspondence remark is in SrrgLean/Core/ViabilityFunctional.lean.
 
 @[default_target]
 lean_lib «SrrgLean» where
