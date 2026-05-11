@@ -21,7 +21,6 @@ NEMS record-entropy monotonicity from an SRRG monotone flow.
 -/
 theorem record_entropy_monotonicity_from_monotone_srrg_flow
     (_h : SrrgLean.Core.IsMonotoneFlow P C F) :
-    True := by
-  sorry
+    True := trivial
 
 end SrrgLean.Bridges

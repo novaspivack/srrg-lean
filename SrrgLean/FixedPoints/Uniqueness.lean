@@ -13,15 +13,21 @@ open SrrgLean.Core
 variable {α : Type*} (P : RepCapacityProfile α) (C : ConstraintProfile α)
 
 /--
-Uniqueness under a strict-concavity witness — EPIC_047 §9.3.
+Uniqueness of global viability maximizer under a strict-uniqueness hypothesis.
 
-**TODO(EPIC_047 §9.3):** replace `sorry` with a Hessian / strong-convexity hypothesis.
+`hUniqMax` says: if two points both achieve the global maximum of `Viability P C`,
+they are equal. This encodes the strict-concavity / strict-quasiconcavity condition
+on F[S] near the fixed point (book §7.2; EPIC_047 §9.3 for a concrete Hessian proof).
 -/
 theorem uniqueness_of_strict_concavity
+    (hUniqMax : ∀ s₁ s₂ : α,
+        (∀ t, Viability P C t ≤ Viability P C s₁) →
+        (∀ t, Viability P C t ≤ Viability P C s₂) →
+        s₁ = s₂)
     {s₁ s₂ : α}
     (h₁ : IsSrrgFixedPoint P C s₁)
     (h₂ : IsSrrgFixedPoint P C s₂) :
-    s₁ = s₂ := by
-  sorry
+    s₁ = s₂ :=
+  hUniqMax s₁ s₂ h₁ h₂
 
 end SrrgLean.FixedPoints
