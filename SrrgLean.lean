@@ -29,6 +29,10 @@ import SrrgLean.Connection.IPTBridge
 import SrrgLean.Connection.H9Bridge
 import SrrgLean.Connection.GoldenPhiBridge
 import SrrgLean.Connection.UOneBridge
+-- Phase 5 — Constants (EPIC_049_SCD)
+import SrrgLean.Constants.StrongCP
+import SrrgLean.Constants.GaugeGroupSelection
+import SrrgLean.Constants.GenerationCount
 
 /-!
 # SrrgLean
