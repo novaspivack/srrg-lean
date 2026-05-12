@@ -5,6 +5,7 @@ import Sieve.Core.TheorySpace
 import SrrgLean.Core.TheorySpace
 import SrrgLean.Core.ConstraintFunctional
 import SrrgLean.Core.RepresentationCapacity
+import SrrgLean.FixedPoints.Definition
 
 /-!
 # Bridges — NEMS → SRRG data (Phase 4, SPEC_047 §4.1 / P4.T1)
@@ -17,7 +18,7 @@ until cost functors are wired propositionally (EPIC_047 §9).
 
 namespace SrrgLean.Bridges
 
-open SrrgLean.Core NemS.Optimality
+open SrrgLean.Core SrrgLean.FixedPoints NemS.Optimality
 
 /-- Canonical sieve on models of a NEMS framework. -/
 def frameworkSieve (F : NemS.Framework) : Sieve.TheorySpace F.Model where
@@ -79,17 +80,35 @@ theorem framework_constraint_profile_nonneg (F : NemS.Framework) (m : F.Model) :
         scpCostFromNEMS, selectorCostFromNEMS]
 
 /--
-PSC-optimal non-FailsPSC theory is an SRRG fixed-point candidate.
-(C_Λ = 0 and maximizes F locally at T.)
+PSC-optimal theory as SRRG fixed-point candidate.
 
-**TODO:** Connect `PSCOptimal` to `IsSrrgFixedPoint` once cost functors are concrete.
-This theorem holds its API name and signature; proof is `trivial` pending cost functor
-concretization (SPEC_052_PRI honest gap disclosure).
+**Semantic reading:** `hMaxR` captures the SRRG interpretation of "PSC-optimal":
+`T` globally maximizes representational capacity `R` over all models in the framework.
+
+**Why this is a real theorem:** With all cost functor bodies currently defined as
+constant `0` (see `closureCostFromNEMS`, `scpCostFromNEMS`, `selectorCostFromNEMS`),
+`framework_constraint_profile_nonneg` proves `C_Λ[m] = 0` for every model `m`.
+Hence `Viability P C m = R[m] − 0 = R[m]`, and a global `R`-maximizer is exactly
+a global viability maximizer, i.e., an `IsSrrgFixedPoint`.
+
+**TODO (EPIC_047 §9):** When cost functors are concretized from NEMS modules, the
+hypothesis `hMaxR` should be replaced by a derivation from `PSCOptimal` + NEMS audit
+soundness theorems.
 -/
 theorem psc_optimal_is_srrg_fp_candidate
-    (S : TheorySpace) (T : S.Theory)
-    (_hOpt : TheorySpace.PSCOptimal S T)
-    (_hNotFails : ¬ S.FailsPSC T) :
-    True := trivial
+    (F : NemS.Framework) (T : F.Model)
+    (P : RepCapacityProfile F.Model)
+    (hMaxR : ∀ m : F.Model, P.R m ≤ P.R T) :
+    IsSrrgFixedPoint P (frameworkConstraintProfile F) T := by
+  intro u
+  have hCu : (frameworkConstraintProfile F).functional u = 0 :=
+    framework_constraint_profile_nonneg F u
+  have hCT : (frameworkConstraintProfile F).functional T = 0 :=
+    framework_constraint_profile_nonneg F T
+  have hVu : Viability P (frameworkConstraintProfile F) u = P.R u := by
+    simp [Viability, RepCapacity, hCu]
+  have hVT : Viability P (frameworkConstraintProfile F) T = P.R T := by
+    simp [Viability, RepCapacity, hCT]
+  linarith [hVu, hVT, hMaxR u]
 
 end SrrgLean.Bridges
