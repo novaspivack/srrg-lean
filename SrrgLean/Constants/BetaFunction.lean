@@ -312,8 +312,16 @@ noncomputable def C_proxy (lambda : ℝ) : ℝ :=
 
 /-- The proxy constraint cost is strictly positive for any λ > 0. -/
 lemma C_proxy_pos (lambda : ℝ) (hlam : 0 < lambda) : 0 < C_proxy lambda := by
+  have hU1 := H_U1_pos
+  have hSU2 := H_SU2_pos
+  have hSU3 := H_SU3_pos
   unfold C_proxy gstar_sq
-  positivity
+  have h2lam : (0 : ℝ) < 2 * lambda := by linarith
+  apply mul_pos hlam
+  have t1 : 0 < (H_U1  / (2 * lambda)) ^ 2 := pow_pos (div_pos hU1  h2lam) 2
+  have t2 : 0 < (H_SU2 / (2 * lambda)) ^ 2 := pow_pos (div_pos hSU2 h2lam) 2
+  have t3 : 0 < (H_SU3 / (2 * lambda)) ^ 2 := pow_pos (div_pos hSU3 h2lam) 2
+  linarith
 
 /-- **[A_Lean]** R_proxy = 2 · C_proxy at the fixed point for any λ > 0.
 
@@ -329,7 +337,6 @@ theorem R_proxy_eq_two_mul_C_proxy
   unfold R_proxy C_proxy gstar_sq
   have hlam_ne : lambda ≠ 0 := ne_of_gt hlam
   field_simp
-  ring
 
 /-- **[A_Lean]** The proxy efficiency ratio η_proxy = R_proxy / C_proxy = 2.
 
