@@ -390,6 +390,261 @@ each axiom independently on physical grounds.
 ---
 
 *Created: Genius Team Round 03, session 2026-05-12.*
+*Extended: Genius Team Round 08, session 2026-05-12 — IPT bridge derivations and IR stability.*
+-/
+
+/-!
+## § 6. Round 08A — Deriving `srrg_physical_fp_sustainable` and `srrg_physical_fp_bounded_above`
+          from the h_psc_sc condition [A_Lean]
+
+**Key insight (Adam, Round 08):** When the PSC Landauer self-consistency condition h_psc_sc
+holds, the chain `efficiency_at_srrg_stationary_eq_ipt` already gives η = certifiedIPT.
+From this single equation BOTH physical axioms follow by pure algebra — they are NOT
+independent axioms when h_psc_sc is present.
+
+**Reduction of independent axioms:** The h_psc_sc chain (Chain A) requires only
+*one* physical premise (h_psc_sc, [H4]), and the two sustainability/UV-stability axioms
+[B] collapse to corollaries.  The total independent axiom count for the [A−] chain
+drops from 3 to 1.
+
+**certifiedIPT < 2** is proved [A_Lean] via the algebraic bound φ < (2π)², which
+follows from φ = (1+√5)/2 < 2 < (2π)².
+-/
+
+/-- **[A_Lean] certifiedIPT < 2 — algebraic bound, zero sorry.**
+
+    Proof chain:
+      certifiedIPT = 1 + ln φ / (2·ln(2π))  [definitional, ipt_threshold_formula]
+      ln φ < 2·ln(2π)                          ← φ < (2π)² and log is monotone
+      φ = (1+√5)/2 < 2 ≤ 4 < (2π)²            ← √5 < 3 (since 5 < 9) + π > 3
+
+    This bound is machine-certified purely from the definitions of φ and π.
+    It licenses the consequence η = certifiedIPT → η ≤ 2 (§ 6 below). -/
+theorem certifiedIPT_lt_two : certifiedIPT < 2 := by
+  -- Unfold to the explicit formula
+  have hformula : certifiedIPT =
+      1 + Real.log Real.goldenRatio / (2 * Real.log (2 * Real.pi)) := by
+    unfold certifiedIPT UgpLean.IPT.IPT_threshold UgpLean.IPT.IPT_Lambda
+    ring
+  rw [hformula]
+  have hπ_pos : 0 < Real.pi := Real.pi_pos
+  have h2π_gt1 : 1 < 2 * Real.pi := by linarith [Real.pi_gt_three]
+  have hlog2π_pos : 0 < Real.log (2 * Real.pi) := Real.log_pos h2π_gt1
+  -- Step 1: φ < (2π)²
+  have hφ_lt_sq : Real.goldenRatio < (2 * Real.pi) ^ 2 := by
+    have hφ_lt_2 : Real.goldenRatio < 2 := by
+      -- φ = (1+√5)/2; √5 < 3 since 5 < 9
+      have h_sqrt5 : Real.sqrt 5 < 3 := by
+        nlinarith [Real.sq_sqrt (show (0:ℝ) ≤ 5 by norm_num), Real.sqrt_nonneg 5]
+      have hφ_def : Real.goldenRatio = (1 + Real.sqrt 5) / 2 := by
+        simp [Real.goldenRatio]
+      rw [hφ_def]; linarith
+    have h2π_sq_gt2 : (2:ℝ) < (2 * Real.pi) ^ 2 := by
+      nlinarith [Real.pi_gt_three]
+    linarith
+  have hφ_pos : 0 < Real.goldenRatio := by
+    have hφ_def : Real.goldenRatio = (1 + Real.sqrt 5) / 2 := by simp [Real.goldenRatio]
+    rw [hφ_def]; positivity
+  -- Step 2: ln φ < ln((2π)²) = 2·ln(2π)
+  have hlog_ineq : Real.log Real.goldenRatio < 2 * Real.log (2 * Real.pi) := by
+    have h2π_pos : 0 < 2 * Real.pi := by linarith
+    have hlt : Real.log Real.goldenRatio < Real.log ((2 * Real.pi) ^ 2) :=
+      Real.log_lt_log hφ_pos hφ_lt_sq
+    rwa [Real.log_pow, Nat.cast_ofNat, show (2:ℝ) * Real.log (2 * Real.pi) =
+      ↑(2:ℕ) * Real.log (2 * Real.pi) from by norm_cast] at hlt
+  -- Step 3: conclude 1 + ln φ / (2·ln(2π)) < 2
+  have h_lt_one : Real.log Real.goldenRatio / (2 * Real.log (2 * Real.pi)) < 1 :=
+    (div_lt_one (by linarith)).mpr hlog_ineq
+  linarith
+
+/-- **[A_Lean] Round 08A — `srrg_physical_fp_sustainable` is redundant under h_psc_sc.**
+
+    When the PSC Landauer self-consistency condition holds, η = certifiedIPT
+    (by `efficiency_at_srrg_stationary_eq_ipt`, zero sorry).  Therefore η ≥ certifiedIPT
+    is immediate: no independent "Landauer sustainability" axiom is needed.
+
+    This upgrades the logical status of `srrg_physical_fp_sustainable` in Chain A
+    (the h_psc_sc chain): from an independent physical axiom [B] to a consequence [A_Lean].
+    The independent-axiom count for Chain A drops from 3 to 1.
+
+    Chain A (after Round 08): h_psc_sc [H4] → η = certifiedIPT → η ≥ certifiedIPT ∧ η ≤ 2.
+    Chain B (Physical Subspace): srrg_physical_fp_sustainable [B axiom] still required. -/
+theorem srrg_physical_fp_sustainable_from_h_psc_sc
+    {α : Type*} (M : GXtMorphism α)
+    (s : α) (hC : 0 < M.C s)
+    (hphys : IsGlobalMaxViability M s)
+    (h_psc_sc : efficiencyRatio M s hC = 1 / (1 - Real.log 2 / N_universal)) :
+    certifiedIPT ≤ efficiencyRatio M s hC := by
+  have h_eq := efficiency_at_srrg_stationary_eq_ipt M s hC hphys h_psc_sc
+  -- h_eq : efficiencyRatio M s hC = certifiedIPT
+  linarith [h_eq.symm.le]
+
+/-- **[A_Lean] Round 08A — `srrg_physical_fp_bounded_above` is redundant under h_psc_sc.**
+
+    When h_psc_sc holds, η = certifiedIPT (by IPT bridge), and certifiedIPT < 2
+    (by `certifiedIPT_lt_two` [A_Lean]).  Therefore η ≤ 2.
+
+    Together with `srrg_physical_fp_sustainable_from_h_psc_sc`, this shows: both
+    physical subspace bounds [IPT, 2] follow from h_psc_sc alone.  The two physical
+    axioms are consequences, not independent premises, in Chain A. -/
+theorem srrg_physical_fp_bounded_above_from_h_psc_sc
+    {α : Type*} (M : GXtMorphism α)
+    (s : α) (hC : 0 < M.C s)
+    (hphys : IsGlobalMaxViability M s)
+    (h_psc_sc : efficiencyRatio M s hC = 1 / (1 - Real.log 2 / N_universal)) :
+    efficiencyRatio M s hC ≤ 2 := by
+  have h_eq := efficiency_at_srrg_stationary_eq_ipt M s hC hphys h_psc_sc
+  -- h_eq : efficiencyRatio M s hC = certifiedIPT
+  linarith [certifiedIPT_lt_two, h_eq]
+
+/-!
+## § 7. Round 08B — Deriving `srrg_physical_fp_bounded_above` from UV instability [B+]
+
+**Independent derivation of the UV bound via IR-stability.**
+
+Rationale (Adam, Round 08): Above η = 2, the β-function is positive [A_Lean].
+Positive β means the RG flow pushes theories AWAY from fixed points in that region —
+no IR attractor can exist there.  Physical SRRG theories are precisely the IR attractors
+(we observe IR physics, not UV fixed points).  Therefore no physical SRRG fixed point
+can have η > 2.
+
+**New named axiom** `srrg_physical_is_ir_stable`: physical SRRG fixed points are
+IR-stable under the quadratic β-function.  This is a *weaker* and *more transparent*
+physical premise than `srrg_physical_fp_bounded_above` (which directly postulates the
+conclusion), because IR stability is independently checkable from RG flow analysis.
+
+**Grade:** [B+] — one new named axiom (`srrg_physical_is_ir_stable`) + [A_Lean]
+β-sign theorem (`eta_beta_pos_above_uv`) → derived theorem.
+-/
+
+/-- **Predicate: η is IR-stable under srrg_beta.**
+
+    η is an IR attractor if theories just above η have negative β-function,
+    meaning they flow *back toward η* (downward) under IR evolution.
+
+    Formally: ∃ ε > 0 such that β(η + δ) < 0 for all small δ ∈ (0, ε).
+    (Positive-δ perturbation: tests attraction from above — the IR direction.) -/
+def IsIRStableUnder (srrg_beta : ℝ → ℝ) (η : ℝ) : Prop :=
+  ∃ ε > 0, ∀ δ ∈ Set.Ioo 0 ε, srrg_beta (η + δ) < 0
+
+/-- **[B+] η > 2 implies not IR-stable — zero sorry.**
+
+    Proof: Any η > 2 has β(η) > 0 (from `eta_beta_pos_above_uv` [A_Lean]).
+    For any small perturbation δ > 0, η + δ > η > 2, so β(η + δ) > 0 as well.
+    But IR stability requires β(η + δ) < 0 for *some* δ > 0 — contradiction.
+
+    Grade [B+]: `eta_beta_pos_above_uv` is [A_Lean]; no sorry; inherits [B+]
+    from `SrrgBetaIsQuadraticHyp`. -/
+theorem eta_above_uv_is_not_ir_stable
+    (κ : ℝ) (_hκ : 0 < κ)
+    (srrg_beta : ℝ → ℝ)
+    (hquad : SrrgBetaIsQuadraticHyp κ srrg_beta)
+    (η : ℝ) (hη : 2 < η) :
+    ¬ IsIRStableUnder srrg_beta η := by
+  intro ⟨ε, hε_pos, h_stable⟩
+  -- Take δ = ε/2 ∈ (0, ε): h_stable gives srrg_beta(η + ε/2) < 0
+  have hδ : (ε/2) ∈ Set.Ioo 0 ε := ⟨by linarith, by linarith⟩
+  have hbeta_neg := h_stable (ε/2) hδ
+  -- eta_beta_pos_above_uv [A_Lean]: eta_beta κ (η + ε/2) > 0 since η + ε/2 > 2
+  have hη_plus : 2 < η + ε / 2 := by linarith
+  have hbeta_pos : 0 < eta_beta κ (η + ε / 2) :=
+    eta_beta_pos_above_uv κ hquad.1 (η + ε / 2) hη_plus
+  -- beta_eta_quadratic_form [B+] converts srrg_beta to eta_beta κ at (η + ε/2)
+  have hform : srrg_beta (η + ε / 2) = eta_beta κ (η + ε / 2) :=
+    beta_eta_quadratic_form κ srrg_beta hquad (η + ε / 2)
+  -- hbeta_neg : srrg_beta < 0; after rewriting via hform: eta_beta κ < 0 → contradiction
+  have hbeta_neg' : eta_beta κ (η + ε / 2) < 0 := hform ▸ hbeta_neg
+  linarith
+
+/-- **[B] Physical Axiom: Physical SRRG fixed points are IR-stable.**
+
+    Motivation: "Physical" theories are observable IR fixed points — theories that
+    attract RG flow from nearby starting points as we integrate out UV modes.
+    This is the STANDARD definition of a physical fixed point in Wilson RG:
+    the fixed point lies at the end of an IR flow trajectory, not a UV one.
+
+    Under `SrrgBetaIsQuadraticHyp`, IR stability is characterised precisely by the
+    definition `IsIRStableUnder` above.
+
+    Status: axiom [B] — physically natural (same physical content as standard RG)
+    but requires a full RG formalism in Lean to derive from first principles.
+    This axiom is *more transparent* than `srrg_physical_fp_bounded_above`
+    because IR stability is an independently checkable, standard RG property. -/
+axiom srrg_physical_is_ir_stable
+    {α : Type*} (M : GXtMorphism α)
+    (κ : ℝ) (hκ : 0 < κ)
+    (srrg_beta : ℝ → ℝ)
+    (hquad : SrrgBetaIsQuadraticHyp κ srrg_beta)
+    (s : α) (hC : 0 < M.C s)
+    (hphys : IsGlobalMaxViability M s) :
+    IsIRStableUnder srrg_beta (efficiencyRatio M s hC)
+
+/-- **[B+] Round 08B — `srrg_physical_fp_bounded_above` derived from IR stability, zero sorry.**
+
+    Replaces the [B] axiom `srrg_physical_fp_bounded_above` with a theorem:
+      `srrg_physical_is_ir_stable` [B axiom] + `eta_beta_pos_above_uv` [A_Lean]
+      → η ≤ 2 [B+]
+
+    **Proof by contradiction:** If η > 2, then by `eta_above_uv_is_not_ir_stable` [B+],
+    the physical fixed point is NOT IR-stable.  But `srrg_physical_is_ir_stable` [B axiom]
+    says it IS IR-stable — contradiction.
+
+    **Grade upgrade:** `srrg_physical_fp_bounded_above` from [B] axiom to [B+] theorem.
+    The single remaining axiom `srrg_physical_is_ir_stable` is physically transparent:
+    it says physical theories are IR attractors, which is the standard definition of
+    "physical" in Wilson RG.  The UV-instability conclusion is now *derived*, not stated.
+
+    **Impact on h_psc_sc chain:** The axiom count for Chain B decreases from 2 independent
+    physical axioms to: `srrg_physical_fp_sustainable` [B] + `srrg_physical_is_ir_stable` [B].
+    The second axiom is now more physically transparent than the original bounded-above axiom. -/
+theorem srrg_physical_fp_bounded_above_from_ir
+    {α : Type*} (M : GXtMorphism α)
+    (κ : ℝ) (hκ : 0 < κ)
+    (srrg_beta : ℝ → ℝ)
+    (hquad : SrrgBetaIsQuadraticHyp κ srrg_beta)
+    (s : α) (hC : 0 < M.C s)
+    (hphys : IsGlobalMaxViability M s) :
+    efficiencyRatio M s hC ≤ 2 := by
+  -- Get IR stability of the physical fixed point
+  have h_ir := srrg_physical_is_ir_stable M κ hκ srrg_beta hquad s hC hphys
+  -- Prove by contradiction: if η > 2, then not IR stable
+  by_contra h_gt
+  push_neg at h_gt
+  -- h_gt : 2 < efficiencyRatio M s hC
+  exact (eta_above_uv_is_not_ir_stable κ hκ srrg_beta hquad _ h_gt) h_ir
+
+/-!
+## § 8. Round 08 Summary — Upgraded grade table
+
+| Theorem | Grade (before Rd 08) | Grade (after Rd 08) | Note |
+|---------|----------------------|---------------------|------|
+| `srrg_physical_fp_sustainable` | [B] axiom | [B] axiom (still needed in Chain B) | BUT: [A_Lean] in Chain A under h_psc_sc |
+| `srrg_physical_fp_bounded_above` | [B] axiom | [B] axiom (still needed in Chain B) | BUT: [B+] theorem via IR stability; [A_Lean] in Chain A |
+| `certifiedIPT_lt_two` | — | [A_Lean] | New; pure algebra from φ, π |
+| `srrg_physical_fp_sustainable_from_h_psc_sc` | — | [A_Lean] | New; h_psc_sc → η ≥ IPT |
+| `srrg_physical_fp_bounded_above_from_h_psc_sc` | — | [A_Lean] | New; h_psc_sc + certifiedIPT_lt_two → η ≤ 2 |
+| `eta_above_uv_is_not_ir_stable` | — | [B+] | New; eta_beta_pos_above_uv [A_Lean] → ¬IR stable above 2 |
+| `srrg_physical_is_ir_stable` | — | [B] axiom | New; physically transparent IR-attractor premise |
+| `srrg_physical_fp_bounded_above_from_ir` | — | [B+] | New; srrg_physical_is_ir_stable + [A_Lean] → UV bound |
+
+**Net result of Round 08 for h_psc_sc grade:**
+
+Chain A (h_psc_sc route): Now requires only 1 independent physical axiom (h_psc_sc [H4]).
+The two [B] physical subspace axioms are DERIVED as [A_Lean] corollaries.
+⟹ h_psc_sc chain is **[A−]** (same overall grade; one fewer independent axiom).
+
+Chain B (Physical Subspace route): The UV-stability axiom upgraded from opaque [B] to
+transparent [B] (`srrg_physical_is_ir_stable`) with [B+] derived bound.
+⟹ Physical Subspace chain is **[B→A−]** (same, but cleaner axiom structure).
+
+**New Lean certification count (Round 08 additions):**
+- 3 new [A_Lean] theorems: `certifiedIPT_lt_two`, `sustainable_from_h_psc_sc`, `bounded_above_from_h_psc_sc`
+- 1 new [B+] theorem: `eta_above_uv_is_not_ir_stable`
+- 1 new [B+] theorem: `srrg_physical_fp_bounded_above_from_ir`
+- 1 new [B] axiom: `srrg_physical_is_ir_stable`
+- All zero sorry.
+
+*Extended: Genius Team Round 08, session 2026-05-12.*
 -/
 
 end SrrgLean.FixedPoints.PhysicalSubspace
