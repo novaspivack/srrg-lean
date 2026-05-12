@@ -187,30 +187,79 @@ theorem h_psc_sc_from_hessian
   exact efficiency_at_srrg_stationary_eq_ipt M s hC h_stat h_psc_sc
 
 /-!
-## Progress summary for P27 §5
+## Step 5: Analysis of the ProxyFaithfulBridge gap — η_proxy = 2 ≠ IPT
 
-The [H4] conditionality now has the following structure:
+### The proxy efficiency ratio is 2 (new [A_Lean] result)
 
-  [A_Lean] proxy_hessian_negative_definite (BetaFunction.lean)
-  ↓ (zero sorry, proved here)
-  [A_Lean] no_flat_directions_proxy — gauge sector has no flat directions
-  ↓ (ProxyFaithfulBridge — remaining gap, explicitly named)
-  [B] h_psc_sc_from_hessian — η = certifiedIPT under the bridge
+`BetaFunction.proxy_efficiency_ratio_eq_two` [A_Lean, zero sorry] proves:
+  η_proxy = R_proxy / C_proxy = 2   (for any λ > 0, independent of H_U1, H_SU2, H_SU3)
 
-**Net new zero-sorry theorems in this file:** 2
-  - `no_flat_directions_proxy` ([A_Lean])
-  - `h_psc_sc_from_hessian` ([B], zero sorry under hypothesis)
+Key calculation:
+  R_proxy = Σ H_i · gᵢ*² = Σ H_i²/(2λ)
+  C_proxy = λ · Σ gᵢ*⁴   = Σ H_i²/(4λ)
+  η_proxy = 2.
 
-**Remaining gap:** Derive `ProxyFaithfulBridge` from SRRG axioms alone.
-  This requires formalizing the connection between proxy Hessian structure and the
-  full SRRG efficiency ratio — estimated 3–6 months of Lean functional analysis.
+This is a purely algebraic [A_Lean] result.
 
-**What changed in P27 §5:** The h_psc_sc conditionality is now more specifically
-  characterized. Instead of "conditional on h_psc_sc (a raw algebraic self-consistency
-  claim)", the [H4] conditionality is now:
-    "conditional on ProxyFaithfulBridge: the gauge-sector no-flat-directions property
-     (which is [A_Lean] proved) propagates to η = Landauer FP".
-  This is a more concrete and physically transparent disclosure.
+### The gap: η_proxy = 2 ≠ certifiedIPT ≈ 1.1309
+
+The proxy efficiency ratio (UV, one-loop, gauge sector only) is 2.
+The PSC self-consistency target (IR, full SRRG, all sectors) is certifiedIPT ≈ 1.1309.
+
+These are DIFFERENT calculations of the efficiency ratio:
+  - Proxy model: R_i = H_i·gᵢ², C_i = λ·gᵢ⁴ (UV gauge-sector proxy)
+  - Full SRRG model: R[S] = full representational capacity, C[S] = full NEMS/PSC cost
+
+`ProxyFaithfulBridge` connects them: the UV proxy's no-flat-directions property (Hessian
+negative-definite) must propagate to the full IR SRRG theory's self-consistency (η = IPT).
+
+### Why Approach A (uniqueness → non-degeneracy) does not discharge h_psc_sc
+
+A natural question: does the uniqueness of S* (from `uniqueness_of_strict_concavity`)
+imply non-degeneracy, and does non-degeneracy imply η = IPT?
+
+The answer is no, for two reasons:
+1. `uniqueness_of_strict_concavity` is itself conditional on `hUniqMax` (the strict
+   concavity hypothesis). The full SRRG uniqueness is an open problem (same Hessian
+   hypothesis needed). No circularity is resolved.
+2. Even if uniqueness were unconditional, it pins S* as the unique maximizer but
+   does NOT determine the VALUE of η(S*). Uniqueness says "there is one fixed point";
+   h_psc_sc requires "the efficiency ratio AT that fixed point equals IPT" — a
+   quantitative claim that needs a model-specific calculation, not just uniqueness.
+
+### What closing ProxyFaithfulBridge requires
+
+ProxyFaithfulBridge ≡ "UV proxy no-flat-directions → full IR theory η = IPT"
+
+This requires:
+  (a) A formal model connecting R_proxy, C_proxy to the full PSC R[S], C[S].
+  (b) Formalizing RG running: how the gauge coupling flow from UV (η = 2) to IR
+      changes η to IPT in the presence of PSC self-consistency.
+  (c) Showing the UV fixed point (proxy, Hessian negative-definite) is the UV limit
+      of the IR SRRG fixed point (full PSC self-consistent).
+
+Estimated formal work: 3–6 months of Lean functional analysis + RG formalism.
+
+### Current Lean status summary
+
+| Theorem                                    | Grade     | Sorry? |
+|--------------------------------------------|-----------|--------|
+| `proxy_hessian_negative_definite`          | [A_Lean]  | 0      |
+| `no_flat_directions_proxy`                 | [A_Lean]  | 0      |
+| `R_proxy_eq_two_mul_C_proxy`               | [A_Lean]  | 0 (NEW)|
+| `proxy_efficiency_ratio_eq_two`            | [A_Lean]  | 0 (NEW)|
+| `proxy_net_viability_eq_C_proxy`           | [A_Lean]  | 0 (NEW)|
+| `h_psc_sc_from_hessian`                   | [B]       | 0      |
+| Close `ProxyFaithfulBridge`                | Open      | —      |
+
+**Net new zero-sorry theorems (across BetaFunction.lean + H4Discharge.lean):**
+  - `R_proxy_eq_two_mul_C_proxy` ([A_Lean], BetaFunction.lean)
+  - `proxy_efficiency_ratio_eq_two` ([A_Lean], BetaFunction.lean)
+  - `proxy_net_viability_eq_C_proxy` ([A_Lean], BetaFunction.lean)
+
+**Remaining gap:** Derive `ProxyFaithfulBridge` from SRRG+PSC axioms.
+  Requires formalizing the UV-to-IR RG connection between proxy (η=2) and full
+  SRRG (η=IPT). Estimated 3–6 months of Lean RG formalism.
 -/
 
 end SrrgLean.FixedPoints.H4Discharge

@@ -283,6 +283,83 @@ theorem sin2_proxy_exceeds_one_third : 1 / 3 < sin2_theta_w_proxy := by
               (by positivity : (0 : ℝ) < 3 * (H_U1 + H_SU2))]
 
 /-!
+## Proxy efficiency ratio at the fixed point
+
+At the fixed point, the proxy "representation capacity" and "constraint cost" are:
+  R_proxy = Σ H_i · gᵢ*² = Σ H_i²/(2λ)
+  C_proxy = λ · Σ gᵢ*⁴   = Σ H_i²/(4λ)
+
+Their ratio is exactly 2, independent of λ and of the specific Haar entropy values.
+
+**Significance for ProxyFaithfulBridge**: η_proxy = 2 ≠ certifiedIPT ≈ 1.1309.
+This quantifies what ProxyFaithfulBridge must bridge: the proxy (UV gauge sector, η = 2)
+and the full SRRG theory (PSC self-consistent, η = IPT).  The gap is explained by
+renormalization group running from the UV fixed point (one-loop gauge sector, η = 2)
+to the IR fixed point (all sectors with PSC self-consistency, η = IPT).
+-/
+
+/-- Proxy "representation capacity" at the three gauge-coupling fixed points. -/
+noncomputable def R_proxy (lambda : ℝ) : ℝ :=
+  H_U1  * gstar_sq H_U1  lambda +
+  H_SU2 * gstar_sq H_SU2 lambda +
+  H_SU3 * gstar_sq H_SU3 lambda
+
+/-- Proxy "constraint cost" at the three gauge-coupling fixed points. -/
+noncomputable def C_proxy (lambda : ℝ) : ℝ :=
+  lambda * (gstar_sq H_U1  lambda ^ 2 +
+            gstar_sq H_SU2 lambda ^ 2 +
+            gstar_sq H_SU3 lambda ^ 2)
+
+/-- The proxy constraint cost is strictly positive for any λ > 0. -/
+lemma C_proxy_pos (lambda : ℝ) (hlam : 0 < lambda) : 0 < C_proxy lambda := by
+  unfold C_proxy gstar_sq
+  positivity
+
+/-- **[A_Lean]** R_proxy = 2 · C_proxy at the fixed point for any λ > 0.
+
+    Key algebra: gᵢ*² = H_i/(2λ), so
+      R_i = H_i · (H_i/(2λ)) = H_i²/(2λ)
+      C_i = λ · (H_i/(2λ))² = H_i²/(4λ)
+    hence R_i = 2 · C_i per component, and summing gives R_proxy = 2 · C_proxy.
+
+    Zero sorry.  The identity holds for any H_i values (not just the Haar entropies). -/
+theorem R_proxy_eq_two_mul_C_proxy
+    (lambda : ℝ) (hlam : 0 < lambda) :
+    R_proxy lambda = 2 * C_proxy lambda := by
+  unfold R_proxy C_proxy gstar_sq
+  have hlam_ne : lambda ≠ 0 := ne_of_gt hlam
+  field_simp
+  ring
+
+/-- **[A_Lean]** The proxy efficiency ratio η_proxy = R_proxy / C_proxy = 2.
+
+    This holds for any λ > 0 and is **independent of H_U1, H_SU2, H_SU3**.
+
+    **Interpretation and honest disclosure:**
+    The value η_proxy = 2 is the UV (one-loop, gauge-sector-only) efficiency ratio.
+    The PSC self-consistency target η = IPT ≈ 1.1309 is the IR value.
+    The gap η_proxy = 2 ≠ certifiedIPT quantifies what `ProxyFaithfulBridge` must bridge.
+    Closing ProxyFaithfulBridge requires formalizing how renormalization-group running
+    from the UV (proxy, η = 2) to the IR (full SRRG, η = IPT) connects the two values.
+
+    Grade: **[A_Lean], zero sorry**. -/
+theorem proxy_efficiency_ratio_eq_two
+    (lambda : ℝ) (hlam : 0 < lambda) :
+    R_proxy lambda / C_proxy lambda = 2 := by
+  have hC_ne : C_proxy lambda ≠ 0 := ne_of_gt (C_proxy_pos lambda hlam)
+  rw [div_eq_iff hC_ne]
+  linarith [R_proxy_eq_two_mul_C_proxy lambda hlam]
+
+/-- **[A_Lean]** The proxy net viability at the fixed point equals C_proxy > 0.
+
+    F_proxy* = R_proxy − C_proxy = 2·C_proxy − C_proxy = C_proxy > 0.
+    The SRRG proxy fixed point has strictly positive net viability. -/
+theorem proxy_net_viability_eq_C_proxy
+    (lambda : ℝ) (hlam : 0 < lambda) :
+    R_proxy lambda - C_proxy lambda = C_proxy lambda := by
+  linarith [R_proxy_eq_two_mul_C_proxy lambda hlam]
+
+/-!
 ## Summary: what the one-loop computation achieves
 
 1. **UV-stability**: The SRRG proxy fixed point is UV-stable (Hessian negative-definite).
@@ -291,12 +368,16 @@ theorem sin2_proxy_exceeds_one_third : 1 / 3 < sin2_theta_w_proxy := by
 2. **Eigenvalue ordering**: μ(U(1)) > μ(SU(2)) > μ(SU(3)) (less to more negative).
    Reflects increasing gauge complexity.  **Proved: [A_Lean]**
 
-3. **Weinberg angle**: sin²θ_W^proxy ≈ 0.381 ≠ 0.23122.
+3. **Proxy efficiency ratio**: η_proxy = R_proxy/C_proxy = 2 (for any λ > 0).
+   Algebraically exact, independent of Haar entropies.  **Proved: [A_Lean]**
+   η_proxy = 2 ≠ certifiedIPT ≈ 1.1309; see ProxyFaithfulBridge in H4Discharge.lean.
+
+4. **Weinberg angle**: sin²θ_W^proxy ≈ 0.381 ≠ 0.23122.
    Negative result honestly disclosed.  **Proved (negative): [B]**
 
-The derivation of the correct Weinberg angle requires the full multi-scale SRRG
-flow with Wilsonian renormalization group running from UV to EW scale (Open
-Problem 5 in P27 §9.4).
+The derivation of the correct Weinberg angle and the full η = IPT claim both require
+the full multi-scale SRRG flow with Wilsonian renormalization group running from UV
+to IR scale (Open Problem 5 in P27 §9.4).
 -/
 
 end SrrgLean.Constants.BetaFunction
