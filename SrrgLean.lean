@@ -33,6 +33,10 @@ import SrrgLean.Connection.UOneBridge
 import SrrgLean.Constants.StrongCP
 import SrrgLean.Constants.GaugeGroupSelection
 import SrrgLean.Constants.GenerationCount
+-- Phase 5 cont. — Constants Phase 2 (EPIC_049_SCD Phase 2)
+import SrrgLean.Constants.BetaFunction
+import SrrgLean.Constants.HiggsQuartic
+import SrrgLean.Constants.CosmologicalConstant
 
 /-!
 # SrrgLean
