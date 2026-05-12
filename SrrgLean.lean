@@ -19,6 +19,7 @@ import SrrgLean.FixedPoints.H4Discharge
 import SrrgLean.FixedPoints.EtaFlow
 import SrrgLean.FixedPoints.NoThirdFixedPoint
 import SrrgLean.FixedPoints.BetaEtaQuadratic
+import SrrgLean.FixedPoints.PhysicalSubspace
 -- Phase 3 — Applications
 import SrrgLean.Applications.InformationEfficiency
 import SrrgLean.Applications.GaugeSymmetry
