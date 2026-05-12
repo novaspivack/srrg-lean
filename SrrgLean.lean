@@ -16,6 +16,7 @@ import SrrgLean.FixedPoints.Stability
 import SrrgLean.FixedPoints.Uniqueness
 import SrrgLean.FixedPoints.PhysicalConstants
 import SrrgLean.FixedPoints.H4Discharge
+import SrrgLean.FixedPoints.EtaFlow
 -- Phase 3 — Applications
 import SrrgLean.Applications.InformationEfficiency
 import SrrgLean.Applications.GaugeSymmetry
