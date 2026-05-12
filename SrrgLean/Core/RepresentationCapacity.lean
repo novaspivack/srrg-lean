@@ -5,7 +5,7 @@ import SrrgLean.Core.TheorySpace
 # Core — Representation capacity R[S] (book §6.2)
 
 `RepCapacityProfile` bundles a nonnegative real functional. Deriving concrete bounds
-from `SelectorStrength` barrier theorems is tracked as EPIC_047 §9.1.
+from `SelectorStrength` barrier theorems is an open formalization target.
 -/
 
 namespace SrrgLean.Core
@@ -31,7 +31,7 @@ def RepCapacityBoundedBy {α : Type u} (P : RepCapacityProfile α) (B : ℝ) : P
   ∀ s, P.R s ≤ B
 
 /-!
-## Diagonal barrier theorems (SPEC_052_PRI §A2)
+## Diagonal barrier theorems
 
 These theorems give `RepCapacity` actual computational content beyond a placeholder.
 The diagonal barrier (SelectorStrength.BarrierSchema in nems-lean) says: no

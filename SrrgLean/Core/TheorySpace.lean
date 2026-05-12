@@ -23,7 +23,7 @@ structure SrrgTheorySpace (α : Type u) extends Sieve.TheorySpace α where
   complexity_nonneg : ∀ s, 0 ≤ complexity s
 
 /-!
-## Extended SRRG theory space (SPEC_052_PRI §A3)
+## Extended SRRG theory space
 
 `SrrgTheorySpaceFull` adds the `NemS.Optimality.TheorySpace` fields: descriptional
 complexity `K` (as a natural number) and record equivalence `RecordEquivalent`.

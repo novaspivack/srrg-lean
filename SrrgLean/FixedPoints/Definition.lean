@@ -3,7 +3,7 @@ import SrrgLean.Core.ViabilityFunctional
 /-!
 # Fixed points — viability maximizer formulation (book §7.1)
 
-This matches the SPEC_047 “simplified” global-maximum definition. It is **not** the same
+This uses the “simplified” global-maximum definition. It is **not** the same
 as a **flow** fixed point `F s ≃ s`; see `Existence.lean` for MFP-1 flow existence.
 -/
 

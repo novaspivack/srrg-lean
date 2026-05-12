@@ -2,10 +2,10 @@ import UgpPhysicsLean.IPT.InformationProfitThreshold
 import SrrgLean.Applications.InformationEfficiency
 
 /-!
-# Bridges — SRRG ⇒ IPT (Phase 4, SPEC_047 §4.2 / P4.T2)
+# Bridges — SRRG ⇒ IPT
 
 The **numerical identification** `R/C = IPT_threshold` at a tangency/stationary point
-is the `SrrgLean.Connection.IPTBridge` obligation (SPEC_046_Y8L **[H1][H2][H4]** bundle).
+is the `SrrgLean.Connection.IPTBridge` obligation ([H1][H2][H4] bundle).
 This file only anchors the certified target constant.
 -/
 

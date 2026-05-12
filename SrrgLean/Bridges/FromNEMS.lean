@@ -8,12 +8,12 @@ import SrrgLean.Core.RepresentationCapacity
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Bridges — NEMS → SRRG data (Phase 4, SPEC_047 §4.1 / P4.T1)
+# Bridges — NEMS → SRRG data
 
 This is the **typing** layer: every `NemS.Framework` carries a canonical `SrrgTheorySpace`
 on `Framework.Model`. Functorial assignment of `RepCapacityProfile` / `ConstraintProfile`
 from specific NEMS modules (Selectors, SelfImprovement, …) stays intentionally parametric
-until cost functors are wired propositionally (EPIC_047 §9).
+until cost functors are wired propositionally.
 -/
 
 namespace SrrgLean.Bridges
@@ -40,7 +40,7 @@ theorem framework_nonempty_srrg (F : NemS.Framework) :
   ⟨frameworkSrrgTheorySpace F⟩
 
 /-!
-## Cost functor wiring (SPEC_052_PRI §B2)
+## Cost functor wiring
 
 Three definitional-equality cost functors that map `NemS.Framework` modules to SRRG
 `ConstraintProfile` components. Bodies are `0` placeholders with honest TODO comments
@@ -91,7 +91,7 @@ constant `0` (see `closureCostFromNEMS`, `scpCostFromNEMS`, `selectorCostFromNEM
 Hence `Viability P C m = R[m] − 0 = R[m]`, and a global `R`-maximizer is exactly
 a global viability maximizer, i.e., an `IsSrrgFixedPoint`.
 
-**TODO (EPIC_047 §9):** When cost functors are concretized from NEMS modules, the
+**TODO:** When cost functors are concretized from NEMS modules, the
 hypothesis `hMaxR` should be replaced by a derivation from `PSCOptimal` + NEMS audit
 soundness theorems.
 -/

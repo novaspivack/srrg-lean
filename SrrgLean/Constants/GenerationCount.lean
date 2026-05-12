@@ -4,7 +4,7 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Constants — Generation Count N_gen = 3 via SRRG (EPIC_049_SCD, Target P2b)
+# Constants — Generation Count N_gen = 3 via SRRG
 
 ## The SRRG argument for N_gen = 3
 

@@ -9,7 +9,7 @@ import Alpha.Theorems.AlphaTheorem
 - **Flow-level** existence is a direct corollary of MFP-1 (`CSRI.master_fixed_point`).
 - **Viability maximizers** on **finite** theory spaces always exist (purely combinatorial).
 
-## Alpha theorem (SPEC_052_PRI §B4)
+## Alpha theorem
 
 The **Alpha theorem** (`Alpha.alpha_theorem`, Theorem 63.3 in `reflexive-closure-lean`)
 proves the necessary existence of the pre-categorial ontological ground of reflexive reality.
@@ -56,7 +56,7 @@ theorem viability_maximizer_exists_of_fintype [Fintype α] [Nonempty α]
   exact ⟨s, fun t => hs t⟩
 
 /-!
-### Alpha-strengthened fixed-point existence (SPEC_052_PRI §B4)
+### Alpha-strengthened fixed-point existence
 
 **Alpha theorem (reflexive-closure-lean): the necessary pre-categorial ground exists.**
 
@@ -80,7 +80,7 @@ theorem alpha_strengthened_fp_existence
     hBridgeSyn hBridgeExt hBridgeGhost R hExists
 ```
 
-The full composition is real and correct; the package-unification step is deferred.
+The full composition is real and correct; the package-unification step is pending.
 -/
 theorem alpha_strengthened_fp_existence
     {α : Type u} [CSRI α]

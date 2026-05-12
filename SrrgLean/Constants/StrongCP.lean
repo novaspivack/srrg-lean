@@ -4,7 +4,7 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Constants — Strong CP Phase θ_QCD = 0 (EPIC_049_SCD, Target P1a)
+# Constants — Strong CP Phase θ_QCD = 0
 
 ## The SRRG argument for θ_QCD = 0
 
@@ -35,7 +35,7 @@ closure, not from a symmetry (axion mechanism) or anthropic reasoning.
   capture the physics claim "CP violation is a non-invariant predicate under
   time-reversal → external selector required → C_closure > 0".  Formalizing these
   axioms from first principles requires connecting QFT CP-odd operators to the SRRG
-  closure functional, which is deferred (see `EPIC_049_SCD §8 dependencies`).
+  closure functional, which is deferred to future work.
 
 - Grade: [B] — structural argument formally structured in Lean; physics axioms
   disclosed; proof of implication certified.
@@ -75,7 +75,7 @@ to `C_closure`.
   `CPViol(s) > 0  →  C_closure(s) > 0`.
 
 This axiom encodes the physical claim above.  Deriving it from the SRRG closure
-cost definition is a goal for EPIC_049_SCD Phase 2 (requires formalizing the
+cost definition is a future formalization goal (requires formalizing the
 relationship between CP-odd operators and the SRRG closure functional).
 -/
 

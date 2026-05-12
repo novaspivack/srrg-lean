@@ -4,7 +4,7 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Constants — Cosmological Constant Structural Argument (EPIC_049_SCD Phase 2, Target P4)
+# Constants — Cosmological Constant Structural Argument
 
 ## Context
 

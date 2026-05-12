@@ -5,7 +5,7 @@ import SrrgLean.Core.ConstraintFunctional
 /-!
 # Core — Net viability F[S] = R[S] − C_Λ[S] (book §6.4)
 
-## Connection to viable-continuation-lean (SPEC_052_PRI §B1)
+## Connection to viable-continuation-lean
 
 `Viability P C s > 0` corresponds to `HasViability.Viable s` in `viable-continuation-lean`.
 The SRRG specializes that abstract framework to the self-referential theory-space setting.

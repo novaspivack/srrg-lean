@@ -1,7 +1,7 @@
 import UgpPhysicsLean.IPT.InformationProfitThreshold
 
 /-!
-# Applications — IPT as an information-efficiency fixed point (Phase 3, SPEC_047 §5 P3.T1)
+# Applications — IPT as an information-efficiency fixed point
 
 Certified content lives in `UgpPhysicsLean.IPT`; this module is the SRRG-facing entry point.
 -/

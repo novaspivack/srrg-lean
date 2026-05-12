@@ -4,7 +4,7 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Constants — Higgs Quartic Coupling λ_H from SRRG EW Stability (EPIC_049_SCD Phase 2, Target P3)
+# Constants — Higgs Quartic Coupling λ_H from SRRG EW Stability
 
 ## Context
 

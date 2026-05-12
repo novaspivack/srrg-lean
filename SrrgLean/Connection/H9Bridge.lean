@@ -2,7 +2,7 @@ import UgpPhysicsLean.GXT.H9SelfConsistency
 import UgpPhysicsLean.IPT.InformationProfitThreshold
 
 /-!
-# H9 self-consistency bridge (SPEC_046_Y8L **[H3]**)
+# H9 self-consistency bridge
 
 Links `UgpPhysicsLean.GXT.H9SelfConsistency` to `UgpLean.IPT.IPT_threshold`.
 

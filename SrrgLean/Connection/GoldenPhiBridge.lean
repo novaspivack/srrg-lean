@@ -3,7 +3,7 @@ import UgpLean.GTE.LinearResponse
 /-!
 # Golden ratio / A1 bridge
 
-EPIC_046 / GXT **A1** is already proved in `ugp-lean` as `abs_psi_eq_inv_phi`.
+GXT A1 is already proved in `ugp-lean` as `abs_psi_eq_inv_phi`.
 This module re-exports it at the `srrg-lean` boundary for P27 narrative cohesion.
 -/
 

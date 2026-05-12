@@ -4,7 +4,7 @@ import SrrgLean.Core.ViabilityFunctional
 # Core — SRRG flow (book §6.5, §7.1)
 
 Discrete surrogate for the β-flow. A full variational gradient formulation (`δF/δS`)
-is EPIC_047 §9.2.
+is an open problem.
 -/
 
 namespace SrrgLean.Core

@@ -5,7 +5,7 @@ import SrrgLean.FixedPoints.Definition
 import SrrgLean.Bridges.ToUGP
 
 /-!
-# Constants — SM Gauge Group Selection via Multi-Scale SRRG (EPIC_049_SCD, Target P1b)
+# Constants — SM Gauge Group Selection via Multi-Scale SRRG
 
 ## The multi-scale SRRG argument
 
@@ -55,7 +55,7 @@ Full certification of the EW and QCD sectors requires formalizing:
   - Asymptotic freedom condition in Lean (requires QFT β-function machinery).
   - PSC sieve at multiple scales (requires multi-scale extension of `nems-lean`).
   - Yukawa coupling rank condition (requires fermion mass matrix formalism).
-These are open problems tracked in EPIC_049_SCD and P27 §8.3 (OP2).
+These are open problems; see P27 §8.3 (OP2).
 -/
 
 namespace SrrgLean.Constants.GaugeGroupSelection
@@ -98,7 +98,7 @@ theorem scale1_minimal_group
 
 The following hypotheses encode the electroweak PSC sieve conditions.
 They are physically motivated and structurally sound; their formal derivation
-from the SRRG axioms is open (EPIC_049_SCD OP2).
+from the SRRG axioms is open (P27 §8.3 OP2).
 -/
 
 /-- A gauge candidate is EW-admissible if:
@@ -222,7 +222,7 @@ Based on the above:
 P27 Conjecture 6.3 is upgraded to **Theorem (conditional)**: U(1) × SU(2) × SU(3)
 satisfies all multi-scale SRRG fixed-point minimality conditions, conditional on the
 three scale-specific PSC sieve hypotheses.  Full [A_Lean] certification requires
-EPIC_049_SCD Phase 2A (3–6 months of Lean formalization work).
+an ongoing formalization effort (3–6 months of Lean work).
 -/
 
 end SrrgLean.Constants.GaugeGroupSelection

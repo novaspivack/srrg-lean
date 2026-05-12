@@ -1,7 +1,7 @@
 import UgpPhysicsLean.GXT.U1DirectProof
 
 /-!
-# Applications — gauge symmetry at the fixed point (Phase 3, SPEC_047 §5 P3.T2)
+# Applications — gauge symmetry at the fixed point
 
 Proof obligations for “minimal symmetry = U(1)” are developed in `U1DirectProof`
 (Haar measure, entropy, selection interfaces).

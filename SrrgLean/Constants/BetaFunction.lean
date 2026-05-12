@@ -4,7 +4,7 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Constants — One-Loop SRRG β-Function (EPIC_049_SCD Phase 2, Target P2)
+# Constants — One-Loop SRRG β-Function
 
 ## Context
 

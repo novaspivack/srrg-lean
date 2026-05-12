@@ -3,12 +3,12 @@ import UgpPhysicsLean.IPT.InformationProfitThreshold
 import SrrgLean.Connection.H9Bridge
 
 /-!
-# IPT ↔ SRRG bridge (EPIC_046 / EPIC_047)
+# IPT ↔ SRRG bridge
 
 Machine-checked theorems showing that IPT arises as the SRRG information-efficiency
 fixed point.
 
-## Discharge log (EPIC_047)
+## Key results
 
 - **[H3]** self-consistency: proved in `H9Bridge.ipt_landauer_map_fixed_point` (zero sorry).
 - **[H1][H2][H4] bundle**: discharged below by replacing the placeholder `True` hypotheses
@@ -26,7 +26,7 @@ namespace SrrgLean.Connection
 /-- Certified IPT threshold `ρ_crit` from the UGP PSC derivation (P15 / GXT). -/
 noncomputable def certifiedIPT : ℝ := UgpLean.IPT.IPT_threshold
 
-/-- GXT morphisms R,C on a theory/state type (SPEC_046_R3K §7). -/
+/-- GXT morphisms R,C on a theory/state type. -/
 structure GXtMorphism (α : Type*) where
   R : α → ℝ
   C : α → ℝ
@@ -39,7 +39,7 @@ def IsGlobalMaxViability {α : Type*} (M : GXtMorphism α) (s : α) : Prop :=
   ∀ t : α, M.R t - M.C t ≤ M.R s - M.C s
 
 /--
-**Main EPIC_046/047 bridge — SPEC_046_Y8L [H1][H2][H4] bundle.  ZERO SORRY.**
+**Main SRRG-IPT bridge — [H1][H2][H4] bundle.  ZERO SORRY.**
 
 Proof obligations discharged:
 
@@ -67,10 +67,10 @@ theorem efficiency_at_srrg_stationary_eq_ipt
   exact ipt_landauer_map_fixed_point
 
 /-!
-## Companion theorem: IPT from SRRG stationary + 1D-reduction (SPEC_052_PRI [H4] localization)
+## Companion theorem: IPT from SRRG stationary + 1D-reduction
 
 **[H4] localization:** The hypothesis `h_psc_sc` in `efficiency_at_srrg_stationary_eq_ipt`
-is now explicitly named as a **1D-reduction axiom** `h_1d` — the premise that the
+is explicitly named as a **1D-reduction axiom** `h_1d` — the premise that the
 information-efficiency curve is proportional/tangent to the Landauer self-consistency
 line at the stationary point.  This is a strictly stronger disclosure than the raw
 self-consistency claim: it makes the geometric origin of [H4] (tangency in 1D projections)
@@ -81,7 +81,7 @@ structural composition.
 -/
 
 /--
-**SPEC_052_PRI — IPT from SRRG stationary + 1D-reduction (zero sorry).**
+**IPT from SRRG stationary + 1D-reduction (zero sorry).**
 
 `h_1d` is the **1D-reduction axiom**: it encodes the premise that at the SRRG stationary
 point the viability functional reduces to a 1-dimensional proportionality / tangency

@@ -4,12 +4,12 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 
 /-!
-# Bridges — SRRG ⇒ UGP gauge layer (Phase 4, SPEC_047 §4.3 / P4.T3)
+# Bridges — SRRG ⇒ UGP gauge layer
 
 Linkage theorems combine `SCPCost = 0` / minimality hypotheses with the U(1) selection
 proofs in `U1DirectProof`. (Full composition is intentionally left to call sites.)
 
-## SPEC_052_PRI §C1: SRRG-flavored re-export of U1DirectProof
+## SRRG-flavored re-export of U1DirectProof
 
 `U1DirectProof.circle_iso_addCircle_2pi` establishes that the circle group U(1) ≅ ℝ/(2πℤ)
 as a topological group. Re-exported here with an SRRG-contextual name.
@@ -50,7 +50,7 @@ The SRRG hypotheses `_h_fp` and `_h_scp_zero` contextualise why U(1) is the
 relevant group at this fixed point: `C_SCP = 0` forces exact self-computation,
 which requires the circle group as the minimal adjudication structure.
 
-**TODO (SPEC_052_PRI §C1):** Compose with `U1DirectProof.u1_minimality_reduced`
+**TODO:** Compose with `U1DirectProof.u1_minimality_reduced`
 and wire `scpCost` to the PSC self-computation structure to derive this from the
 SRRG fixed-point data rather than citing it as an independent fact.
 -/

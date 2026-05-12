@@ -1,7 +1,7 @@
 import UgpLean.GTE.LinearResponse
 
 /-!
-# Applications — golden-ratio contraction in linear response (Phase 3, SPEC_047 §5 P3.T3)
+# Applications — golden-ratio contraction in linear response
 
 Certified as `UgpLean.GTE.abs_psi_eq_inv_phi` (lemma also cited in the IPT derivation).
 -/
