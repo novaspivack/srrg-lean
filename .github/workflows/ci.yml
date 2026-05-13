@@ -15,19 +15,19 @@ jobs:
         working-directory: workspace/srrg-lean
     steps:
       - name: Checkout ugp-lean
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: novaspivack/ugp-lean
           path: workspace/ugp-lean
 
       - name: Checkout ugp-physics-lean
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: novaspivack/ugp-physics-lean
           path: workspace/ugp-physics-lean
 
       - name: Checkout srrg-lean
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: workspace/srrg-lean
 
