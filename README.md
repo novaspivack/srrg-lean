@@ -47,7 +47,7 @@ lake exe cache get
 lake build
 ```
 
-Lean toolchain is pinned to **`v4.29.0-rc6`** to stay aligned with `ugp-lean` / Mathlib `v4.29.0-rc6`.
+Lean toolchain is pinned to **`v4.29.1`** to stay aligned with `ugp-lean` / Mathlib `v4.29.1`.
 
 ## License
 

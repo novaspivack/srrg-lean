@@ -2,7 +2,7 @@
 
 ## Toolchain
 
-File `lean-toolchain` pins Lean `v4.29.0-rc6` (matches `ugp-lean` / `ugp-physics-lean`).
+File `lean-toolchain` pins Lean `v4.29.1` (matches `ugp-lean` / `ugp-physics-lean`).
 
 ## Checkout layout
 

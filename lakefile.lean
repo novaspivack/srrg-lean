@@ -27,22 +27,22 @@ package «srrg-lean» where
 -- nems-lean: git dep (same URL as reflexive-closure-lean's requirement) eliminates
 -- the path-vs-git origin conflict that previously blocked reflexive-closure-lean.
 require «nems-lean» from git
-  "https://github.com/novaspivack/nems-lean.git" @ "5b991736e703c5debe6c88b54269890fb573f93f"
+  "https://github.com/novaspivack/nems-lean.git" @ "main"
 
 -- ugp-physics-lean (and ugp-lean transitively): local path — locally-developed
 -- modules not yet pushed to GitHub.
 require «ugp-physics-lean» from "../ugp-physics-lean"
 
 require «reflexive-closure-lean» from git
-  "https://github.com/novaspivack/reflexive-closure-lean.git" @ "d88025571d71bf8faaac61581ef8a944de38fa44"
+  "https://github.com/novaspivack/reflexive-closure-lean.git" @ "main"
 
 require «viable-continuation-lean» from git
-  "https://github.com/novaspivack/viable-continuation-lean.git" @ "b83fe969cd4148e20cf49d9b38ba6e57f4a80085"
+  "https://github.com/novaspivack/viable-continuation-lean.git" @ "main"
 
 -- Explicit mathlib pin so the root's v4.29.0-rc6 constraint wins over the
 -- v4.29.0-rc3 that viable-continuation-lean's committed manifest otherwise pulls in.
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git" @ "v4.29.0-rc6"
+  "https://github.com/leanprover-community/mathlib4.git" @ "v4.29.1"
 
 @[default_target]
 lean_lib «SrrgLean» where
