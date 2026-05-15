@@ -20,6 +20,7 @@ import SrrgLean.FixedPoints.EtaFlow
 import SrrgLean.FixedPoints.NoThirdFixedPoint
 import SrrgLean.FixedPoints.BetaEtaQuadratic
 import SrrgLean.FixedPoints.PhysicalSubspace
+import SrrgLean.FixedPoints.VEVNoGo
 -- Phase 3 — Applications
 import SrrgLean.Applications.InformationEfficiency
 import SrrgLean.Applications.GaugeSymmetry
