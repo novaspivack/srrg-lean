@@ -52,7 +52,7 @@ Full library architecture: **EPIC_047** → `SPEC_047_SRL_SRRG_LEAN.md`.
 - **FixedPoints layer**: complete. β_η structure, no-third-zero, Vieta uniqueness, physical subspace axioms, and the new **VEVNoGo** dimensional-transmutation obstruction are all zero-sorry.
 - **Constants layer**: complete. Six derived-constant modules, all zero-sorry.
 - **Connection layer**: `H9Bridge`, `GoldenPhiBridge`, `UOneBridge` are zero-sorry. `IPTBridge` has one explicit `sorry` (h_psc_sc [H4]; grade [A−]).
-- **VEVProof layer**: complete. Four modules zero-sorry: `GoldstoneEntropyCorrection` (algebraic chain |ψ|=1/φ → φ^(1/3) volume correction), `PSCEntropyDuality` (discharges the two open axioms as theorems), `EWGoldstoneManifold` (O1 discharge: 3 Goldstone bosons, Vol(S³)=2π²), `EWVacuumBridge` (connects PhysicalSubspace U(1) minimality to S³ Goldstone manifold). Full chain grade [A−]; v_PSC = 246.16 GeV (−0.024% from v_PDG = 246.22 GeV).
+- **VEVProof layer**: complete. Four modules zero-sorry: `GoldstoneEntropyCorrection` (algebraic chain |ψ|=1/φ → φ^(1/3) volume correction), `PSCEntropyDuality` (proves `psc_entropy_contraction_duality` and `srrg_s3_entropy_increase` as theorems — discharged Round G1), `EWGoldstoneManifold` (O1 discharge: 3 Goldstone bosons, Vol(S³)=2π²), `EWVacuumBridge` (connects PhysicalSubspace U(1) minimality to S³ Goldstone manifold). Full chain grade [A−]; 1 named open axiom remains: `psc_ew_entropy_maximization` (Lean plumbing gap: connect `EWGoldstoneManifold` to `PhysicalSubspace`). v_PSC = 246.16 GeV (−0.024% from v_PDG = 246.22 GeV).
 - **Core modules** (`SrrgLean.Core.*`): not yet started; would replace the `sorry` bundle in `IPTBridge`.
 
 ## Layout expectation (sibling checkouts)
