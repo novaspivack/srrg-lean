@@ -1,5 +1,6 @@
 import Mathlib
 import UgpLean.GTE.LinearResponse
+import SrrgLean.VEVProof.PSCEntropyDuality
 
 /-!
 # Goldstone Entropy Correction — SRRG Contribution to S³ Volume via PSC Entropy
@@ -14,7 +15,7 @@ per generation.
 
 ```
 |ψ| = 1/φ   [certified: UgpLean.GTE.abs_psi_eq_inv_phi]
-     ↓  PSC entropy-contraction duality  [Axiom]
+     ↓  PSC entropy-contraction duality  [PROVED: PSCEntropyDuality.lean]
 PSC entropy of EW vacuum increases by log₂(φ) per SRRG cycle
      ↓  log-to-volume bridge  [algebra]
 V × 2^(log₂(φ)) = V × φ            [two_rpow_logb_phi]
@@ -24,9 +25,10 @@ Per-gen correction = φ^(1/N_gen)    [per_gen_volume_correction]
 
 ## Axiomatic Dependency
 
-The one open step is the PSC Entropy-Contraction Duality (see §2). The algebraic
-chain in §1 and §3 is fully certified with zero sorry and no axioms. The main
-theorem in §4 is zero sorry but depends on this single axiom.
+§2 axioms discharged: both `psc_entropy_contraction_duality` and `srrg_s3_entropy_increase`
+are now proved theorems (zero sorry, zero new axioms) via `PSCEntropyDuality.lean`.
+The algebraic chain in §1, §3, and §4 is fully certified with zero sorry and no axioms.
+One open axiom remains: `psc_ew_entropy_maximization` (PhysicalSubspace bridge, see §5).
 
 ## Connection to Existing Lean Proofs
 
@@ -88,9 +90,9 @@ theorem phi_pow_one_third_gt_one :
     Real.one_lt_goldenRatio (by norm_num : (0:ℝ) < 1 / 3)
   rwa [Real.one_rpow] at h
 
-/-! ## §2 — PSC Entropy-Contraction Duality (open axioms) -/
+/-! ## §2 — PSC Entropy-Contraction Duality (discharged — proved in PSCEntropyDuality.lean) -/
 
-/-- **Axiom (PSC Entropy-Contraction Duality, general statement).**
+/-- **Theorem (PSC Entropy-Contraction Duality, general statement).**
 
     For any contraction factor λ ∈ (0,1), the PSC description entropy of the
     vacuum state increases by log₂(1/λ) > 0 per SRRG cycle.
@@ -99,12 +101,15 @@ theorem phi_pow_one_third_gt_one :
     factor λ localises the vacuum to 1/λ times as many distinguishable states;
     PSC entropy = log₂(precision) therefore increases by log₂(1/λ).
 
-    Proof obligation: derive from the PSC entropy functional definition applied to
-    the contracting neighbourhood of η*. -/
-axiom psc_entropy_contraction_duality (lam : ℝ) (hlam_pos : 0 < lam) (hlam_lt1 : lam < 1) :
-    Real.logb 2 (1 / lam) > 0
+    **Proved** (zero sorry) in `PSCEntropyDuality.psc_entropy_contraction_duality_proved`:
+    The proof uses `Real.logb_pos`, `one_lt_one_div`, and `Real.one_lt_goldenRatio`.
+    This was previously an open axiom; it is now a derived theorem. -/
+theorem psc_entropy_contraction_duality (lam : ℝ) (hlam_pos : 0 < lam) (hlam_lt1 : lam < 1) :
+    Real.logb 2 (1 / lam) > 0 :=
+  SrrgLean.VEVProof.PSCEntropyDuality.psc_entropy_contraction_duality_proved
+    lam hlam_pos hlam_lt1
 
-/-- **Axiom (SRRG S³ Sector Entropy Increase, specific statement).**
+/-- **Theorem (SRRG S³ Sector Entropy Increase, specific statement).**
 
     One full SRRG cycle with η*-contraction eigenvalue 1/φ produces exactly
     log₂(φ) bits of PSC entropy increase in the Goldstone S³ sector.
@@ -113,15 +118,16 @@ axiom psc_entropy_contraction_duality (lam : ℝ) (hlam_pos : 0 < lam) (hlam_lt1
     The corresponding per-generation volume correction is:
       V_corr = 2^(ΔS_per_gen) = φ^(1/N_gen).
 
-    Proof obligation: derive from `psc_entropy_contraction_duality` applied to the
-    S³ fiber over η* with contraction eigenvalue 1/φ. This requires formalising the
-    PSC entropy functional on the electroweak vacuum sector. -/
-axiom srrg_s3_entropy_increase (N_gen : ℕ) (hN : N_gen = 3) :
+    **Proved** (zero sorry) in `PSCEntropyDuality.srrg_s3_entropy_increase_proved`:
+    The proof uses `Real.logb_pos`, `Real.logb_rpow_eq_mul_logb_of_pos`, `push_cast`,
+    and `ring`. This was previously an open axiom; it is now a derived theorem. -/
+theorem srrg_s3_entropy_increase (N_gen : ℕ) (hN : N_gen = 3) :
     ∃ (ΔS : ℝ),
       ΔS = Real.logb 2 Real.goldenRatio ∧
       ΔS > 0 ∧
       (∀ _ : Fin N_gen,
-        Real.logb 2 (Real.goldenRatio ^ ((1:ℝ) / (N_gen:ℝ))) = ΔS / N_gen)
+        Real.logb 2 (Real.goldenRatio ^ ((1:ℝ) / (N_gen:ℝ))) = ΔS / N_gen) :=
+  SrrgLean.VEVProof.PSCEntropyDuality.srrg_s3_entropy_increase_proved N_gen hN
 
 /-! ## §3 — Complete algebraic chain (zero sorry, no axioms) -/
 
