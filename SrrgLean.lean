@@ -28,6 +28,10 @@ import SrrgLean.Applications.GoldenRatioFlow
 -- Phase 4 — Bridges
 import SrrgLean.Bridges.FromNEMS
 import SrrgLean.Bridges.ToIPT
+-- Phase 5 — VEV Proof (EW VEV derivation via PSC entropy + S³ Goldstone manifold)
+import SrrgLean.VEVProof.GoldstoneEntropyCorrection
+import SrrgLean.VEVProof.PSCEntropyDuality
+import SrrgLean.VEVProof.EWGoldstoneManifold
 import SrrgLean.Bridges.ToUGP
 import SrrgLean.Bridges.ToNEMSConfirmations
 -- Connection layer (EPIC_046 Y8L / H9)

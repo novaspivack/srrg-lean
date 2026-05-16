@@ -38,16 +38,20 @@ Full library architecture: **EPIC_047** → `SPEC_047_SRL_SRRG_LEAN.md`.
 | `Constants.CosmologicalConstant` | 0 | Structural exclusion of Planck-scale Λ_vac |
 | `Bridges.*` (5 modules) | 0 | NEMS/PSC → SRRG connection layer |
 | `Connection.*` (4 modules) | 1† | IPT/H9/GoldenPhi/U1 bridges |
+| `VEVProof.GoldstoneEntropyCorrection` | 0 | φ^(1/N_gen) SRRG correction to S³ Goldstone volume |
+| `VEVProof.PSCEntropyDuality` | 0 | PSC Entropy-Contraction Duality — core of EW VEV derivation |
+| `VEVProof.EWGoldstoneManifold` | 0 | EW Goldstone manifold S³: 3 bosons, Vol = 2π², O1 discharge |
 
 † One `sorry` in `IPTBridge` (hypotheses [H1][H2][H4]; h_psc_sc grade [A−]).
 
-**Total: 33 imports, zero sorry in all owned modules except one disclosed axiom in IPTBridge.**
+**Total: 36 imports, zero sorry in all owned modules except one disclosed axiom in IPTBridge.**
 
 ## Status
 
 - **FixedPoints layer**: complete. β_η structure, no-third-zero, Vieta uniqueness, physical subspace axioms, and the new **VEVNoGo** dimensional-transmutation obstruction are all zero-sorry.
 - **Constants layer**: complete. Six derived-constant modules, all zero-sorry.
 - **Connection layer**: `H9Bridge`, `GoldenPhiBridge`, `UOneBridge` are zero-sorry. `IPTBridge` has one explicit `sorry` (h_psc_sc [H4]; grade [A−]).
+- **VEVProof layer**: complete. Three modules zero-sorry: `GoldstoneEntropyCorrection` (algebraic chain |ψ|=1/φ → φ^(1/3) volume correction), `PSCEntropyDuality` (discharges the two open axioms as theorems), `EWGoldstoneManifold` (O1 discharge: 3 Goldstone bosons, Vol(S³)=2π²). Full chain grade [A/D]; path to [A−] is connecting `EWGoldstoneManifold` to `PhysicalSubspace` axiom.
 - **Core modules** (`SrrgLean.Core.*`): not yet started; would replace the `sorry` bundle in `IPTBridge`.
 
 ## Layout expectation (sibling checkouts)
