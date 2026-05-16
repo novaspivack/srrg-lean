@@ -32,6 +32,7 @@ import SrrgLean.Bridges.ToIPT
 import SrrgLean.VEVProof.GoldstoneEntropyCorrection
 import SrrgLean.VEVProof.PSCEntropyDuality
 import SrrgLean.VEVProof.EWGoldstoneManifold
+import SrrgLean.VEVProof.EWVacuumBridge
 import SrrgLean.Bridges.ToUGP
 import SrrgLean.Bridges.ToNEMSConfirmations
 -- Connection layer (EPIC_046 Y8L / H9)
