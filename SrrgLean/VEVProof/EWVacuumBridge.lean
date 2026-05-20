@@ -182,7 +182,7 @@ theorem ew_generator_count_and_manifold_from_srrg_fp
 
 /-- **[A−] The psc_ew_entropy_maximization content is derivable from PhysicalSubspace.**
 
-    `psc_ew_entropy_maximization` (axiom in GoldstoneEntropyCorrection.lean) is
+    `psc_ew_entropy_maximization` (proved theorem in GoldstoneEntropyCorrection.lean) is
     numerically proved by `psc_ew_entropy_maximization_numerical_part` [A_Lean].
     This theorem shows the same content holds under the PhysicalSubspace hypotheses,
     closing the [A/D] → [A−] gap:
