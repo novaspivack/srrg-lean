@@ -647,4 +647,125 @@ transparent [B] (`srrg_physical_is_ir_stable`) with [B+] derived bound.
 *Extended: Genius Team Round 08, session 2026-05-12.*
 -/
 
+/-!
+## § 9. Round GT-B3B4 — Proving B4 from B3 + h_psc_sc [B+]
+
+**Key insight (Ninja, GT-B3B4 session 2026-05-27):**
+
+`IsIRStableUnder srrg_beta certifiedIPT` follows directly from
+`SrrgBetaIsQuadraticHyp` via the sign analysis already in EtaFlow.lean.
+No separate axiom is needed for certifiedIPT itself.
+
+Combined with `efficiency_at_srrg_stationary_eq_ipt` (η = certifiedIPT under h_psc_sc),
+this proves `srrg_physical_is_ir_stable` as a **theorem** from B3 + h_psc_sc,
+eliminating it as a named Lean axiom.
+
+**Grade:** [B+] — zero sorry; conditional on B3 (SrrgBetaIsQuadraticHyp) and h_psc_sc.
+
+**Axiom reduction:** `srrg_physical_is_ir_stable` (B4) moves from `axiom` to derived
+theorem. The independent axiom count for the VEV chain drops: B4 is now a consequence
+of B3 + h_psc_sc, both of which were already in the chain.
+-/
+
+/-- **[B+] certifiedIPT is IR-stable under any SrrgBetaIsQuadraticHyp. Zero sorry.**
+
+    Proof: Take ε = (2 − certifiedIPT)/2 > 0. For any δ ∈ (0, ε):
+    - certifiedIPT < certifiedIPT + δ  (since δ > 0)
+    - certifiedIPT + δ < 2             (since δ < (2 − IPT)/2 and IPT < 2)
+    Apply `srrg_beta_neg_between` [B+] to conclude srrg_beta (certifiedIPT + δ) < 0.
+
+    Grade: **[B+]** — inherits from `SrrgBetaIsQuadraticHyp`.  Zero sorry. -/
+theorem srrg_ipt_ir_stable_from_quadratic
+    (κ : ℝ) (_hκ : 0 < κ) (srrg_beta : ℝ → ℝ)
+    (hquad : SrrgBetaIsQuadraticHyp κ srrg_beta) :
+    IsIRStableUnder srrg_beta certifiedIPT := by
+  refine ⟨(2 - certifiedIPT) / 2, by linarith [ipt_lt_two], ?_⟩
+  intro δ hδ
+  have hlo : certifiedIPT < certifiedIPT + δ := by linarith [hδ.1]
+  have hhi : certifiedIPT + δ < 2 := by
+    have hmid : certifiedIPT + (2 - certifiedIPT) / 2 < 2 := by linarith [ipt_lt_two]
+    have hstep : certifiedIPT + δ < certifiedIPT + (2 - certifiedIPT) / 2 := by
+      linarith [hδ.2]
+    linarith
+  exact srrg_beta_neg_between κ srrg_beta hquad (certifiedIPT + δ) hlo hhi
+
+/-- **[B+] Physical fixed points are IR-stable from B3 + h_psc_sc. Zero sorry.**
+
+    Under `SrrgBetaIsQuadraticHyp` (B3) and the PSC self-consistency premise h_psc_sc,
+    physical SRRG fixed points are IR-stable in the sense of `IsIRStableUnder`.
+
+    **Proof chain:**
+    1. h_psc_sc + IsGlobalMaxViability M s
+       → efficiencyRatio M s hC = certifiedIPT  [via `efficiency_at_srrg_stationary_eq_ipt`, A_Lean]
+    2. `srrg_ipt_ir_stable_from_quadratic` [B+]
+       → IsIRStableUnder srrg_beta certifiedIPT
+    3. Rewrite efficiencyRatio = certifiedIPT → conclude.
+
+    **Grade: [B+]** — zero sorry; inherits from B3 (polynomial minimality) and h_psc_sc ([H4]).
+
+    **Impact:** `srrg_physical_is_ir_stable` (B4) is now a *derived theorem*, not a
+    named Lean axiom, under B3 + h_psc_sc.  B4 axiom count decreases by 1. -/
+theorem srrg_physical_is_ir_stable_from_quad_and_psc_sc
+    {α : Type*} (M : GXtMorphism α)
+    (κ : ℝ) (hκ : 0 < κ)
+    (srrg_beta : ℝ → ℝ)
+    (hquad : SrrgBetaIsQuadraticHyp κ srrg_beta)
+    (s : α) (hC : 0 < M.C s)
+    (hphys : IsGlobalMaxViability M s)
+    (h_psc_sc : efficiencyRatio M s hC = 1 / (1 - Real.log 2 / N_universal)) :
+    IsIRStableUnder srrg_beta (efficiencyRatio M s hC) := by
+  have h_eq := efficiency_at_srrg_stationary_eq_ipt M s hC hphys h_psc_sc
+  rw [h_eq]
+  exact srrg_ipt_ir_stable_from_quadratic κ hκ srrg_beta hquad
+
+/-- **[B+] B2 (η ≤ 2) from B3 + h_psc_sc via B4. Zero sorry.**
+
+    Combines `srrg_physical_is_ir_stable_from_quad_and_psc_sc` [B+] with
+    `eta_above_uv_is_not_ir_stable` [B+] to give η ≤ 2 for physical fixed points
+    under B3 + h_psc_sc.
+
+    This is an alternative proof of `srrg_physical_fp_bounded_above_from_h_psc_sc`
+    [A_Lean] via the IR-stability route.  Both proofs give the same conclusion;
+    this one shows the B4 route closes B2 as well.
+
+    Grade **[B+]** (could also be derived as [A_Lean] via the direct route;
+    see `srrg_physical_fp_bounded_above_from_h_psc_sc` above). -/
+theorem srrg_physical_fp_bounded_above_via_ir_and_psc_sc
+    {α : Type*} (M : GXtMorphism α)
+    (κ : ℝ) (hκ : 0 < κ)
+    (srrg_beta : ℝ → ℝ)
+    (hquad : SrrgBetaIsQuadraticHyp κ srrg_beta)
+    (s : α) (hC : 0 < M.C s)
+    (hphys : IsGlobalMaxViability M s)
+    (h_psc_sc : efficiencyRatio M s hC = 1 / (1 - Real.log 2 / N_universal)) :
+    efficiencyRatio M s hC ≤ 2 := by
+  have h_ir := srrg_physical_is_ir_stable_from_quad_and_psc_sc M κ hκ srrg_beta hquad
+    s hC hphys h_psc_sc
+  by_contra h_gt
+  push_neg at h_gt
+  exact (eta_above_uv_is_not_ir_stable κ hκ srrg_beta hquad _ h_gt) h_ir
+
+/-!
+## § 9 Summary — Genius Team Round GT-B3B4 (2026-05-27)
+
+**New [B+] theorems (zero sorry):**
+1. `srrg_ipt_ir_stable_from_quadratic`                     : certifiedIPT is IR-stable under B3
+2. `srrg_physical_is_ir_stable_from_quad_and_psc_sc`       : B4 proved from B3 + h_psc_sc
+3. `srrg_physical_fp_bounded_above_via_ir_and_psc_sc`      : B2 alternative proof via B4
+
+**Grade of B4 after Round GT-B3B4:**
+`srrg_physical_is_ir_stable` (the named Lean axiom) is now **superseded** by
+`srrg_physical_is_ir_stable_from_quad_and_psc_sc` [B+, zero sorry].
+B4 is no longer an independent axiom — it is derived from B3 (Wilsonian polynomial)
+and h_psc_sc (1D-reduction).
+
+**Remaining independent axioms for the VEV chain (after this round):**
+1. `srrg_beta_polynomial_leading_order` (B3, Wilsonian) — requires Polchinski RG formalism
+2. h_psc_sc ([H4], 1D-reduction) — requires SRRG functional analysis to derive
+
+**VEV chain status:** v_PSC = 246.16 GeV is conditional on B3 + h_psc_sc.
+NOT yet unconditional from A1–A3 alone.  The two remaining premises are physically
+motivated and cannot be derived without full Wilsonian/functional-analysis Lean machinery.
+-/
+
 end SrrgLean.FixedPoints.PhysicalSubspace
