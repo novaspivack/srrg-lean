@@ -364,9 +364,10 @@ theorem ugp_substrate_constraint_from_k_alg
 /-- **Full UGP substrate constraint** (zero sorry, conditional on L6 / `TheoryKEqKAlg`).
 
     Unconditional closure requires proving `TheoryKEqKAlg`: abstract `T.K s` equals the
-    algebraic description length `K_alg`. The compilation bound `cmca_compiles_algebraic`
-    (sorry × 1, `CMCACompilationConstant`) and reference-language hypothesis
-    `CMCAReferenceLanguage` (L4 exact equality) are separate physical obligations;
+    algebraic description length `K_alg`. The compilation bound `CMCACompilerBound`
+    (named hypothesis; per-atom GF(7) encodings verified for `defaultGTEAtoms`) and
+    reference-language hypothesis `CMCAReferenceLanguage` (L4 exact equality) are
+    separate physical obligations;
     OP9 argmin closure needs only `k_alg_eq_barrier_minus_viability` and
     `kolmogorov_invariance_argmin`. -/
 theorem ugp_substrate_constraint_full
