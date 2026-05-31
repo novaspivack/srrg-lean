@@ -4,6 +4,7 @@ import SrrgLean.Core.ConstraintFunctional
 import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 import SrrgLean.Core.TheorySpace
+import SrrgLean.Core.CMCALanguage
 
 /-!
 # Bridges — SRRG ⇒ MDL (P27 Open Problem 9)
@@ -78,7 +79,7 @@ for both R and K. Estimated: 4–6 months of Lean functional-analysis work (P27 
 
 namespace SrrgLean.Bridges.ToMDL
 
-open SrrgLean.Core SrrgLean.FixedPoints
+open SrrgLean.Core SrrgLean.Core.CMCALanguage SrrgLean.FixedPoints
 
 variable {α : Type*}
 
@@ -321,5 +322,48 @@ theorem scalar_projection_consistency : True := trivial
 -- `SRRGCABridge.srrg_beta_zero_iff_kCMCA_minimum` from ugp-lean-exp (CatAL).
 -- Those theorems together say: the shared zero of β and K_CMCA is g* = 1/φ.
 -- The present module shows this is the scalar projection of the functional result.
+
+/-! ## §8 — CMCA language connection and UGP substrate proof attempt -/
+
+/-- `descLen` and `CMCALanguage.mdlDescLen` are definitionally equal. -/
+theorem descLen_eq_cmca_mdl
+    (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α) (s : α) :
+    descLen P B C s = cmcaK_real P B C s := by
+  unfold cmcaK_real mdlDescLen
+  rfl
+
+/-- **UGP substrate constraint from CMCA K-identification** (zero sorry, conditional on L6).
+
+    If abstract `T.K` equals the CMCA Kolmogorov profile, the substrate constraint
+    follows from `cmca_k_eq_barrier_minus_viability` (L1–L3, zero sorry). -/
+theorem ugp_substrate_constraint_from_cmca
+    (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (h_k : TheoryKEqCMCAK T P B C) :
+    UGPSubstrateConstraint P B C T := by
+  intro s
+  calc (T.K s : ℝ) = cmcaK_real P B C s := h_k s
+       _ = B - Viability P C s := cmca_k_eq_barrier_minus_viability P B C s
+       _ = descLen P B C s := by simp [descLen]
+
+/-- **Full UGP substrate constraint** (partial — 2 sorries).
+
+    Remaining obligations:
+    - **L4** (`kolmogorov_eq_mdl_profile`): shortest-program Kolmogorov = MDL profile
+    - **L6** (below): abstract `T.K s` = CMCA Kolmogorov at each `s`
+
+    L5 (universality invariance) is proved for the reflexive case; cross-language
+    invariance with vanishing constant requires the ugp-lean-exp universality chain. -/
+theorem ugp_substrate_constraint_full
+    (L : CMCAEncodingLanguage α)
+    (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (h_univ : CMCATuringUniversal α L) :
+    UGPSubstrateConstraint P B C T := by
+  have _ := cmca_universality_invariance L h_univ
+  have _ := kolmogorov_eq_mdl_profile L P B C
+  intro s
+  -- L6: connect abstract T.K to CMCA Kolmogorov via shortest-program + encode
+  sorry
 
 end SrrgLean.Bridges.ToMDL

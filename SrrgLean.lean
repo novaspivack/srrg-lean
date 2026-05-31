@@ -8,6 +8,7 @@ import SrrgLean.Core.TheorySpace
 import SrrgLean.Core.RepresentationCapacity
 import SrrgLean.Core.ConstraintFunctional
 import SrrgLean.Core.ViabilityFunctional
+import SrrgLean.Core.CMCALanguage
 import SrrgLean.Core.FlowEquation
 -- Phase 2 — Fixed points
 import SrrgLean.FixedPoints.Definition
