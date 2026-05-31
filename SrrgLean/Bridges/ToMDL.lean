@@ -466,4 +466,76 @@ theorem theory_k_eq_k_alg_at_srrg_fp
   refine ⟨?_, viability_barrier_at_srrg_fp P B C hV⟩
   simp [hK, K_alg_eq_kCMCA_scalar_of_scalar_viability P B C hV, kCMCA, kCMCA_at_srrg_fp]
 
+/-! ## §10 — Canonical SRRG scalar profile (OP9 unconditional CatAL) -/
+
+/-- Canonical SRRG representation capacity on the coupling axis.
+
+    `R[g] = B + max(0, log₂(g²+g))`.  Below the barrier (`log₂(g²+g) ≤ 0`, i.e. `g ≤ g*`),
+    capacity equals the diagonal barrier `B`; above it, excess capacity tracks the
+    CMCA self-description surplus.  Requires `0 ≤ B` (diagonal barrier nonnegativity). -/
+noncomputable def srrgCanonicalRepProfile (B : ℝ) (hB : 0 ≤ B) : RepCapacityProfile ℝ where
+  R := fun g => B + max 0 (Real.logb 2 (g ^ 2 + g))
+  R_nonneg := by
+    intro g
+    linarith [hB, le_max_left 0 (Real.logb 2 (g ^ 2 + g))]
+
+/-- Canonical SRRG constraint profile on the coupling axis.
+
+    `C_Λ[g] = max(0, K_CMCA(g))`.  On `(0, g*]` the MDL cost is charged to closure;
+    for `g > g*` (`K_CMCA < 0`) the constraint vanishes — the scalar flow is along the
+    coupling axis with no closure penalty in the super-barrier regime. -/
+noncomputable def srrgCanonicalConstraintProfile : ConstraintProfile ℝ where
+  closureCost := fun g => max 0 (kCMCA_scalar g)
+  scpCost := fun _ => 0
+  selectorCost := fun _ => 0
+  closure_nonneg := fun _ => le_max_left _ _
+  scp_nonneg := fun _ => le_refl 0
+  selector_nonneg := fun _ => le_refl 0
+
+private theorem max_zero_sub_max_neg (x : ℝ) :
+    max 0 x - max 0 (-x) = x := by
+  rcases le_total 0 x with hx0 | hx1
+  · by_cases hx : x = 0
+    · simp [hx]
+    · have hxpos : 0 < x := lt_of_le_of_ne hx0 (Ne.symm hx)
+      have hneg : -x ≤ 0 := neg_nonpos.mpr hxpos.le
+      simp [max_eq_right hx0, max_eq_left hneg]
+  · have hxneg' : 0 ≤ -x := neg_nonneg.mpr hx1
+    simp [max_eq_left hx1, max_eq_right hxneg']
+
+private theorem srrgCanonical_max_logb_split (g : ℝ) :
+    max 0 (Real.logb 2 (g ^ 2 + g)) - max 0 (-Real.logb 2 (g ^ 2 + g)) =
+      Real.logb 2 (g ^ 2 + g) :=
+  max_zero_sub_max_neg (Real.logb 2 (g ^ 2 + g))
+
+/-- **Canonical viability identity** (zero sorry): `F[g] = B - K_CMCA(g)`. -/
+theorem srrgCanonicalViabilityEqBarrierMinusKCMCA (B : ℝ) (hB : 0 ≤ B) (g : ℝ) :
+    Viability (srrgCanonicalRepProfile B hB) srrgCanonicalConstraintProfile g =
+      B - kCMCA_scalar g := by
+  simp only [Viability, RepCapacity, srrgCanonicalRepProfile, srrgCanonicalConstraintProfile,
+    ConstraintProfile.functional, ConstraintFunctional, kCMCA_scalar]
+  have h := srrgCanonical_max_logb_split g
+  linarith
+
+/-- **ScalarCouplingViability** for the canonical SRRG instance (zero sorry). -/
+theorem scalarCouplingViability_canonical (B : ℝ) (hB : 0 ≤ B) :
+    ScalarCouplingViability (srrgCanonicalRepProfile B hB) B srrgCanonicalConstraintProfile := by
+  intro g
+  exact srrgCanonicalViabilityEqBarrierMinusKCMCA B hB g
+
+/-- **OP9 CatAL unconditional** (zero sorry): at `g* = 1/φ`, `K_alg = 0` and this is
+    the unique zero of `K_CMCA` on `(0, ∞)` for the canonical scalar SRRG profile. -/
+theorem op9_catal_unconditional (B : ℝ) (hB : 0 ≤ B) :
+    K_alg defaultGTEAtoms (srrgCanonicalRepProfile B hB) B srrgCanonicalConstraintProfile
+        srrgFixedPoint = 0 ∧
+      (∀ g : ℝ, 0 < g →
+          g < srrgFixedPoint →
+            K_alg defaultGTEAtoms (srrgCanonicalRepProfile B hB) B
+                srrgCanonicalConstraintProfile g > 0) ∧
+      (∀ g : ℝ, 0 < g →
+          (K_alg defaultGTEAtoms (srrgCanonicalRepProfile B hB) B
+              srrgCanonicalConstraintProfile g = 0 ↔ g = srrgFixedPoint)) :=
+  op9_catal_at_fixed_point (srrgCanonicalRepProfile B hB) B srrgCanonicalConstraintProfile
+    (scalarCouplingViability_canonical B hB)
+
 end SrrgLean.Bridges.ToMDL
