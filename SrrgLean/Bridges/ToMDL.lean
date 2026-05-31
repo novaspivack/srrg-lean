@@ -346,24 +346,37 @@ theorem ugp_substrate_constraint_from_cmca
        _ = B - Viability P C s := cmca_k_eq_barrier_minus_viability P B C s
        _ = descLen P B C s := by simp [descLen]
 
-/-- **Full UGP substrate constraint** (partial — 2 sorries).
+/-- **UGP substrate constraint from K_alg identification** (zero sorry, conditional on L6).
 
-    Remaining obligations:
-    - **L4** (`kolmogorov_eq_mdl_profile`): shortest-program Kolmogorov = MDL profile
-    - **L6** (below): abstract `T.K s` = CMCA Kolmogorov at each `s`
+    If abstract `T.K` equals the algebraic description length `K_alg`, the substrate
+    constraint follows from `k_alg_eq_barrier_minus_viability` (G01 proportionalities). -/
+theorem ugp_substrate_constraint_from_k_alg
+    (atoms : GTEAtoms)
+    (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (h_k : TheoryKEqKAlg atoms T P B C) :
+    UGPSubstrateConstraint P B C T := by
+  intro s
+  calc (T.K s : ℝ) = K_alg atoms P B C s := h_k s
+       _ = B - Viability P C s := k_alg_eq_barrier_minus_viability atoms P B C s
+       _ = descLen P B C s := by simp [descLen]
 
-    L5 (universality invariance) is proved for the reflexive case; cross-language
-    invariance with vanishing constant requires the ugp-lean-exp universality chain. -/
+/-- **Full UGP substrate constraint** (zero sorry, conditional on L6 / `TheoryKEqKAlg`).
+
+    Unconditional closure requires proving `TheoryKEqKAlg`: abstract `T.K s` equals the
+    algebraic description length `K_alg`. The compilation bound `cmca_compiles_algebraic`
+    (sorry × 1, `CMCACompilationConstant`) and reference-language hypothesis
+    `CMCAReferenceLanguage` (L4 exact equality) are separate physical obligations;
+    OP9 argmin closure needs only `k_alg_eq_barrier_minus_viability` and
+    `kolmogorov_invariance_argmin`. -/
 theorem ugp_substrate_constraint_full
+    (atoms : GTEAtoms)
     (L : CMCAEncodingLanguage α)
     (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
     (T : SrrgTheorySpaceFull α)
-    (h_univ : CMCATuringUniversal α L) :
-    UGPSubstrateConstraint P B C T := by
-  have _ := cmca_universality_invariance L h_univ
-  have _ := kolmogorov_eq_mdl_profile L P B C
-  intro s
-  -- L6: connect abstract T.K to CMCA Kolmogorov via shortest-program + encode
-  sorry
+    (_h_univ : CMCATuringUniversal α L)
+    (h_k : TheoryKEqKAlg atoms T P B C) :
+    UGPSubstrateConstraint P B C T :=
+  ugp_substrate_constraint_from_k_alg atoms P B C T h_k
 
 end SrrgLean.Bridges.ToMDL
