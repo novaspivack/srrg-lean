@@ -299,6 +299,35 @@ theorem srrg_op9_biconditional
   ⟨srrg_op9_full_closure P B C T h_ugp s,
    srrg_op9_converse P B C T h_ugp s⟩
 
+/-- **K_alg equals descLen** (zero sorry): algebraic description length is the SRRG MDL profile. -/
+theorem K_alg_eq_descLen
+    (atoms : GTEAtoms) (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α) (s : α) :
+    K_alg atoms P B C s = descLen P B C s := by
+  simp [K_alg, descLen, cmcaK_real, mdlDescLen]
+
+/-- **OP9 biconditional for K_alg** (zero sorry, unconditional).
+
+    SRRG fixed point ↔ global minimizer of algebraic description length `K_alg`.
+    No abstract `T.K` or `UGPSubstrateConstraint` hypothesis: `K_alg` is definitionally
+    `descLen = B - F[S]`. -/
+theorem srrg_op9_k_alg_biconditional
+    (atoms : GTEAtoms) (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α) (s : α) :
+    IsSrrgFixedPoint P C s ↔
+    ∀ t : α, K_alg atoms P B C s ≤ K_alg atoms P B C t := by
+  have hK :
+      (∀ t, descLen P B C s ≤ descLen P B C t) ↔
+        ∀ t, K_alg atoms P B C s ≤ K_alg atoms P B C t := by
+    constructor
+    · intro h t
+      show K_alg atoms P B C s ≤ K_alg atoms P B C t
+      rw [K_alg_eq_descLen atoms P B C s, K_alg_eq_descLen atoms P B C t]
+      exact h t
+    · intro h t
+      show descLen P B C s ≤ descLen P B C t
+      rw [← K_alg_eq_descLen atoms P B C s, ← K_alg_eq_descLen atoms P B C t]
+      exact h t
+  exact (argmax_viability_iff_argmin_descLen P B C s).trans hK
+
 /-! ## §7 — Connection to scalar CatAL results -/
 
 /-- Scalar consistency: the coupling-axis projection of the main theorem.
@@ -381,6 +410,30 @@ theorem ugp_substrate_constraint_full
     (h_k : TheoryKEqKAlg atoms T P B C) :
     UGPSubstrateConstraint P B C T :=
   ugp_substrate_constraint_from_k_alg atoms P B C T h_k
+
+/-- **UGP substrate constraint for the K_alg theory-space instance** (zero sorry). -/
+theorem ugp_substrate_from_k_alg_instance
+    (atoms : GTEAtoms) (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (hNat : ∀ s, ∃ n : ℕ, (n : ℝ) = K_alg atoms P B C s) :
+    UGPSubstrateConstraint P B C (srrgTheorySpaceWithKAlg atoms P B C T hNat) :=
+  ugp_substrate_constraint_from_k_alg atoms P B C _
+    (theory_k_eq_k_alg_for_k_alg_instance atoms P B C T hNat)
+
+/-- **OP9 biconditional for the K_alg theory-space instance** (zero sorry).
+
+    Discharges `UGPSubstrateConstraint` and `TheoryKEqKAlg` by construction when
+    `K_alg` is ℕ-representable at every theory point. -/
+theorem srrg_op9_biconditional_k_alg_instance
+    (atoms : GTEAtoms) (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (hNat : ∀ s, ∃ n : ℕ, (n : ℝ) = K_alg atoms P B C s) (s : α) :
+    IsSrrgFixedPoint P C s ↔
+    ∀ t : α,
+      ((srrgTheorySpaceWithKAlg atoms P B C T hNat).K s : ℝ) ≤
+        ((srrgTheorySpaceWithKAlg atoms P B C T hNat).K t : ℝ) :=
+  srrg_op9_biconditional P B C (srrgTheorySpaceWithKAlg atoms P B C T hNat)
+    (ugp_substrate_from_k_alg_instance atoms P B C T hNat) s
 
 /-! ## §9 — OP9 CatAL at the SRRG fixed point (coupling axis) -/
 

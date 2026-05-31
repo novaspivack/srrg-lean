@@ -510,6 +510,38 @@ theorem theory_k_eq_k_alg_imp_cmca
   intro s
   rw [h s, K_alg]
 
+/-- Choose the natural representative when `x : ℝ` is exactly a natural cast. -/
+noncomputable def natOfReal (x : ℝ) (h : ∃ n : ℕ, (n : ℝ) = x) : ℕ :=
+  Classical.choose h
+
+/-- **natOfReal_cast** (zero sorry): `(natOfReal x h : ℝ) = x`. -/
+theorem natOfReal_cast (x : ℝ) (h : ∃ n : ℕ, (n : ℝ) = x) :
+    (natOfReal x h : ℝ) = x :=
+  Classical.choose_spec h
+
+/-- Extend a base `SrrgTheorySpaceFull` so `T.K` matches `K_alg` pointwise (cast to ℝ).
+
+    Requires `hNat`: at every theory `s`, `K_alg s` is exactly a natural number cast to ℝ.
+    When `K_alg` is not ℕ-valued (e.g. general scalar `-log₂(g²+g)`), use
+    `srrg_op9_k_alg_biconditional` in `Bridges/ToMDL.lean` instead. -/
+noncomputable def srrgTheorySpaceWithKAlg
+    {α : Type u} (atoms : GTEAtoms) (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (hNat : ∀ s, ∃ n : ℕ, (n : ℝ) = K_alg atoms P B C s) : SrrgTheorySpaceFull α :=
+  { T with
+    K := fun s => natOfReal (K_alg atoms P B C s) (hNat s)
+    K_nonneg := fun _ => Int.natCast_nonneg _ }
+
+/-- **TheoryKEqKAlg** for `srrgTheorySpaceWithKAlg` (zero sorry). -/
+theorem theory_k_eq_k_alg_for_k_alg_instance
+    {α : Type u} (atoms : GTEAtoms) (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (T : SrrgTheorySpaceFull α)
+    (hNat : ∀ s, ∃ n : ℕ, (n : ℝ) = K_alg atoms P B C s) :
+    TheoryKEqKAlg atoms (srrgTheorySpaceWithKAlg atoms P B C T hNat) P B C := by
+  intro s
+  simp [srrgTheorySpaceWithKAlg]
+  exact natOfReal_cast (K_alg atoms P B C s) (hNat s)
+
 /-- Extend a base `SrrgTheorySpace` with `K ≡ 0` (ℕ-valued placeholder). -/
 def srrgTheorySpaceWithZeroK {α : Type u} (T : SrrgTheorySpace α) : SrrgTheorySpaceFull α where
   toSrrgTheorySpace := T
