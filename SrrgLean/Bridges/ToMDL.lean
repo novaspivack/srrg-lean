@@ -392,6 +392,30 @@ def ScalarCouplingViability
     (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ) : Prop :=
   ∀ g : ℝ, Viability P C g = B - kCMCA_scalar g
 
+/-- **G01 reverse identity** (zero sorry): `F[g] = B - K_alg[g]`.
+
+    This is the algebraic rearrangement of `k_alg_eq_barrier_minus_viability`
+    (`K = B - F`). It is **not** the same as `ScalarCouplingViability`, which
+    identifies `K_alg` with the closed-form scalar `kCMCA_scalar(g) = -log₂(g² + g)`. -/
+theorem viability_eq_barrier_minus_k_alg
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ) (g : ℝ) :
+    Viability P C g = B - K_alg defaultGTEAtoms P B C g := by
+  linarith [k_alg_eq_barrier_minus_viability defaultGTEAtoms P B C g]
+
+/-- `ScalarCouplingViability` iff `K_alg` equals the scalar CMCA profile on all `g`. -/
+theorem scalarCouplingViability_iff_k_alg_eq_kCMCA
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ) :
+    ScalarCouplingViability P B C ↔
+      ∀ g : ℝ, K_alg defaultGTEAtoms P B C g = kCMCA_scalar g := by
+  constructor
+  · intro hV g
+    have hF := hV g
+    have hK := k_alg_eq_barrier_minus_viability defaultGTEAtoms P B C g
+    linarith
+  · intro hK g
+    have hK' := k_alg_eq_barrier_minus_viability defaultGTEAtoms P B C g
+    linarith [hK g]
+
 /-- On the scalar coupling axis, `K_alg = K_CMCA`. -/
 theorem K_alg_eq_kCMCA_scalar_of_scalar_viability
     (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ)
