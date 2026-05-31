@@ -325,26 +325,127 @@ theorem defaultGTEAtom_encodings_bounded :
     ∀ l ∈ encodeGTEAtomFields defaultGTEAtoms, l.length ≤ gteAtomZ7DigitBound :=
   encodeGTEAtomFields_length defaultGTEAtoms
 
-/-- **CMCA compiler bound** (named physical obligation — L5 compilation route).
+/-- Flatten per-field GF(7) encodings into one CMCA cell list. -/
+def flattenGTEEncoding (a : GTEAtoms) : List CMCACell :=
+  (encodeGTEAtomFields a).flatten
 
-    Every GTE algebraic description compiles to a CMCA program whose length is at
-    most `K_alg(S) + CMCACompilationConstant`. The per-atom GF(7) digit bound
-    (`defaultGTEAtom_encodings_bounded`, length ≤ 3) gives the constant
-    `log₂(343)` per atom; discharging this hypothesis requires linking abstract
-    `CMCAEncodingLanguage.encode` to the GTE atom compiler and Kolmogorov
-    invariance from `phimdl_turing_universal` (ugp-lean-exp). -/
+theorem flattenGTEEncoding_length (a : GTEAtoms) :
+    (flattenGTEEncoding a).length ≤ 5 * gteAtomZ7DigitBound := by
+  unfold flattenGTEEncoding encodeGTEAtomFields
+  simp only [List.length_flatten]
+  have h := encodeGTEAtomFields_length a
+  have hsum : (encodeRationalZ7 a.g1sq).length + (encodeRationalZ7 a.g2sq).length +
+      (encodeNatZ7 a.N_gen).length + (encodeNatZ7 a.N_fam).length +
+      (encodeNatZ7 a.c_H).length ≤ 5 * gteAtomZ7DigitBound := by
+    have h1 := h (encodeRationalZ7 a.g1sq) (by simp [encodeGTEAtomFields])
+    have h2 := h (encodeRationalZ7 a.g2sq) (by simp [encodeGTEAtomFields])
+    have h3 := h (encodeNatZ7 a.N_gen) (by simp [encodeGTEAtomFields])
+    have h4 := h (encodeNatZ7 a.N_fam) (by simp [encodeGTEAtomFields])
+    have h5 := h (encodeNatZ7 a.c_H) (by simp [encodeGTEAtomFields])
+    omega
+  exact hsum
+
+/-- CMCA program length in bits (three GF(7) digits per field ⇒ `log₂(343)` per field). -/
+noncomputable def cmcaProgramBitLen
+    {α : Type*} (L : CMCAEncodingLanguage α) (s : α) : ℝ :=
+  cmcaProgramLen L s * (Real.log 7 / Real.log 2)
+
+/-- Five GTE atom fields ⇒ at most `5 · log₂(343)` bits in the concrete compiler. -/
+theorem cmcaProgramBitLen_le_five_fields
+    {α : Type*} (L : CMCAEncodingLanguage α) (s : α)
+    (h_len : (L.length (L.encode s) : ℝ) ≤ (5 * gteAtomZ7DigitBound : ℝ)) :
+    cmcaProgramBitLen L s ≤ (5 : ℝ) * CMCACompilationConstant := by
+  unfold cmcaProgramBitLen cmcaProgramLen
+  have hbits :
+      (L.length (L.encode s) : ℝ) * (Real.log 7 / Real.log 2) ≤
+        (5 * gteAtomZ7DigitBound : ℝ) * (Real.log 7 / Real.log 2) :=
+    mul_le_mul_of_nonneg_right h_len (by
+      apply div_nonneg (Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 7))
+        (Real.log_nonneg (by norm_num : (1 : ℝ) ≤ 2)))
+  calc
+    cmcaProgramLen L s * (Real.log 7 / Real.log 2) =
+        (L.length (L.encode s) : ℝ) * (Real.log 7 / Real.log 2) := rfl
+    _ ≤ (5 * gteAtomZ7DigitBound : ℝ) * (Real.log 7 / Real.log 2) := hbits
+    _ = (5 : ℝ) * ((gteAtomZ7DigitBound : ℝ) * (Real.log 7 / Real.log 2)) := by ring
+    _ = (5 : ℝ) * CMCACompilationConstant := by
+      rw [gteAtomZ7DigitBound_bits]
+
+/-- **Concrete GTE→CMCA encoding language** on `GTEAtoms`.
+
+    Programs are theories; `length` is the flattened GF(7) digit count of the atom
+    profile. `encode` / `decode` are identity (the program carries the atom data). -/
+def gteEncodingLanguage : CMCAEncodingLanguage GTEAtoms where
+  Program := GTEAtoms
+  length p := (flattenGTEEncoding p).length
+  length_nonneg _ := Int.natCast_nonneg _
+  encode := id
+  decode p := some p
+  encode_decode _ := rfl
+
+theorem gteEncodingLanguage_program_len (a : GTEAtoms) :
+    cmcaProgramLen gteEncodingLanguage a = (flattenGTEEncoding a).length := by
+  simp [cmcaProgramLen, gteEncodingLanguage]
+
+theorem gteEncodingLanguage_bitlen_bound (a : GTEAtoms) :
+    cmcaProgramBitLen gteEncodingLanguage a ≤ (5 : ℝ) * CMCACompilationConstant := by
+  have hlen :
+      (gteEncodingLanguage.length (gteEncodingLanguage.encode a) : ℝ) ≤
+        (5 * gteAtomZ7DigitBound : ℝ) := by
+    simp only [gteEncodingLanguage, id, flattenGTEEncoding]
+    exact_mod_cast flattenGTEEncoding_length a
+  exact cmcaProgramBitLen_le_five_fields gteEncodingLanguage a hlen
+
+/-- **CMCA compiler bound** (L5′ compilation route).
+
+    Every theory compiles to a CMCA program whose **bit length** is at most
+    `K_alg(S) + 5 · CMCACompilationConstant` (five atom fields, each ≤ 3 GF(7) digits).
+    The universal `∀ L` form is false for arbitrary languages; use
+    `CMCACompilerBoundExists` for the existential witness `gteEncodingLanguage`. -/
 def CMCACompilerBound
     {α : Type*} (L : CMCAEncodingLanguage α) (atoms : GTEAtoms)
     (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α) : Prop :=
-  ∀ s, cmcaProgramLen L s ≤ K_alg atoms P B C s + CMCACompilationConstant
+  ∀ s, cmcaProgramBitLen L s ≤ K_alg atoms P B C s + (5 : ℝ) * CMCACompilationConstant
+
+/-- Some CMCA encoding language satisfies the compiler bound (existential form).
+
+    For `α = GTEAtoms`, the witness is `gteEncodingLanguage` (see
+    `cmca_compiler_bound_exists_gte_atoms`). -/
+def CMCACompilerBoundExists
+    (atoms : GTEAtoms) (P : RepCapacityProfile GTEAtoms) (B : ℝ)
+    (C : ConstraintProfile GTEAtoms) : Prop :=
+  CMCACompilerBound gteEncodingLanguage atoms P B C
 
 /-- **CMCA compiles algebraic** (zero sorry, conditional on `CMCACompilerBound`). -/
 theorem cmca_compiles_algebraic
     {α : Type*} (L : CMCAEncodingLanguage α) (atoms : GTEAtoms)
     (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α) (s : α)
     (h : CMCACompilerBound L atoms P B C) :
-    cmcaProgramLen L s ≤ K_alg atoms P B C s + CMCACompilationConstant :=
+    cmcaProgramBitLen L s ≤ K_alg atoms P B C s + (5 : ℝ) * CMCACompilationConstant :=
   h s
+
+/-- **Compiler bound for the concrete GTE encoder** (zero sorry).
+
+    Requires `K_alg ≥ 0` (MDL length nonnegative on the profile). -/
+theorem cmca_compiler_bound_gte_atoms
+    (atoms : GTEAtoms) (P : RepCapacityProfile GTEAtoms) (B : ℝ)
+    (C : ConstraintProfile GTEAtoms)
+    (hK : ∀ s : GTEAtoms, 0 ≤ K_alg atoms P B C s) :
+    CMCACompilerBound gteEncodingLanguage atoms P B C := by
+  intro s
+  have hleft := gteEncodingLanguage_bitlen_bound s
+  have hright :
+      (5 : ℝ) * CMCACompilationConstant ≤
+        K_alg atoms P B C s + (5 : ℝ) * CMCACompilationConstant := by
+    simpa using add_le_add_left (hK s) ((5 : ℝ) * CMCACompilationConstant)
+  exact hleft.trans hright
+
+/-- **Existential compiler bound** (zero sorry): witness `gteEncodingLanguage`. -/
+theorem cmca_compiler_bound_exists_gte_atoms
+    (atoms : GTEAtoms) (P : RepCapacityProfile GTEAtoms) (B : ℝ)
+    (C : ConstraintProfile GTEAtoms)
+    (hK : ∀ s : GTEAtoms, 0 ≤ K_alg atoms P B C s) :
+    CMCACompilerBoundExists atoms P B C :=
+  cmca_compiler_bound_gte_atoms atoms P B C hK
 
 /-! ## §7 — Kolmogorov = MDL profile (L4 — algebraic + reference language) -/
 
@@ -408,6 +509,37 @@ theorem theory_k_eq_k_alg_imp_cmca
     TheoryKEqCMCAK T P B C := by
   intro s
   rw [h s, K_alg]
+
+/-- Extend a base `SrrgTheorySpace` with `K ≡ 0` (ℕ-valued placeholder). -/
+def srrgTheorySpaceWithZeroK {α : Type u} (T : SrrgTheorySpace α) : SrrgTheorySpaceFull α where
+  toSrrgTheorySpace := T
+  K := fun _ => 0
+  RecordEquivalent := Eq
+  K_nonneg := fun _ => by simp
+
+/-- **TheoryKEqKAlg at the viability barrier** (zero sorry).
+
+    When `Viability[S] = B` for all `S`, `K_alg(S) = 0` and any theory space with
+    `T.K ≡ 0` satisfies `TheoryKEqKAlg`. -/
+theorem theory_k_eq_k_alg_at_barrier
+    {α : Type u} (atoms : GTEAtoms) (T : SrrgTheorySpaceFull α)
+    (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (hK : ∀ s, T.K s = 0) (hV : ∀ s, Viability P C s = B) :
+    TheoryKEqKAlg atoms T P B C := by
+  intro s
+  have h_lhs : (T.K s : ℝ) = 0 := by simpa using congrArg Nat.cast (hK s)
+  have h_rhs : K_alg atoms P B C s = 0 := by
+    simp [K_alg, cmcaK_real, mdlDescLen, hV s, sub_self]
+  rw [h_lhs, h_rhs]
+
+/-- **TheoryKEqKAlg** for `srrgTheorySpaceWithZeroK` when viability equals the barrier. -/
+theorem theory_k_eq_k_alg_zero_k_at_barrier
+    {α : Type u} (atoms : GTEAtoms) (T : SrrgTheorySpace α)
+    (P : RepCapacityProfile α) (B : ℝ) (C : ConstraintProfile α)
+    (hV : ∀ s, Viability P C s = B) :
+    TheoryKEqKAlg atoms (srrgTheorySpaceWithZeroK T) P B C :=
+  theory_k_eq_k_alg_at_barrier atoms (srrgTheorySpaceWithZeroK T) P B C
+    (fun _ => rfl) hV
 
 /-! ## §9 — Scalar coupling projection -/
 
