@@ -5,6 +5,7 @@ import SrrgLean.Core.ViabilityFunctional
 import SrrgLean.FixedPoints.Definition
 import SrrgLean.Core.TheorySpace
 import SrrgLean.Core.CMCALanguage
+import SrrgLean.Bridges.SRRGCABridge
 
 /-!
 # Bridges — SRRG ⇒ MDL (P27 Open Problem 9)
@@ -80,6 +81,7 @@ for both R and K. Estimated: 4–6 months of Lean functional-analysis work (P27 
 namespace SrrgLean.Bridges.ToMDL
 
 open SrrgLean.Core SrrgLean.Core.CMCALanguage SrrgLean.FixedPoints
+open SrrgLean.Bridges.SRRGCABridge
 
 variable {α : Type*}
 
@@ -379,5 +381,65 @@ theorem ugp_substrate_constraint_full
     (h_k : TheoryKEqKAlg atoms T P B C) :
     UGPSubstrateConstraint P B C T :=
   ugp_substrate_constraint_from_k_alg atoms P B C T h_k
+
+/-! ## §9 — OP9 CatAL at the SRRG fixed point (coupling axis) -/
+
+/-- Scalar coupling-axis viability: `F[g] = B - K_CMCA(g)`.
+
+    Under this identification, `K_alg(g) = K_CMCA(g)` and the barrier case at `g*`
+    is `F[g*] = B` (since `K_CMCA(g*) = 0`). -/
+def ScalarCouplingViability
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ) : Prop :=
+  ∀ g : ℝ, Viability P C g = B - kCMCA_scalar g
+
+/-- On the scalar coupling axis, `K_alg = K_CMCA`. -/
+theorem K_alg_eq_kCMCA_scalar_of_scalar_viability
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ)
+    (hV : ScalarCouplingViability P B C) (g : ℝ) :
+    K_alg defaultGTEAtoms P B C g = kCMCA_scalar g := by
+  simp [K_alg, cmcaK_real, mdlDescLen, k_alg_eq_barrier_minus_viability, hV g, sub_sub_cancel]
+
+/-- **Barrier at the SRRG fixed point** (CatAL): `F[g*] = B` when viability follows `K_CMCA`. -/
+theorem viability_barrier_at_srrg_fp
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ)
+    (hV : ScalarCouplingViability P B C) :
+    Viability P C srrgFixedPoint = B := by
+  rw [hV srrgFixedPoint]
+  simpa [kCMCA] using kCMCA_at_srrg_fp
+
+/-- **OP9 CatAL at the fixed point** (zero sorry).
+
+    At `g* = 1/φ`, the algebraic description length vanishes and is the unique zero of
+    `K_CMCA` on `(0, ∞)`. On `(0, g*)`, `K_alg` is strictly positive away from `g*`.
+
+    Chain: `kCMCA_at_srrg_fp` → `F[g*] = B` (barrier) → `K_alg(g*) = B - F[g*] = 0`;
+    uniqueness from `kCMCA_zero_iff_eq_srrg_fp` via `ScalarCouplingViability`. -/
+theorem op9_catal_at_fixed_point
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ)
+    (hV : ScalarCouplingViability P B C) :
+    K_alg defaultGTEAtoms P B C srrgFixedPoint = 0 ∧
+    (∀ g : ℝ, 0 < g → g < srrgFixedPoint → K_alg defaultGTEAtoms P B C g > 0) ∧
+    (∀ g : ℝ, 0 < g → (K_alg defaultGTEAtoms P B C g = 0 ↔ g = srrgFixedPoint)) := by
+  constructor
+  · rw [K_alg_eq_kCMCA_scalar_of_scalar_viability P B C hV]
+    simpa [kCMCA] using kCMCA_at_srrg_fp
+  constructor
+  · intro g hg hlt
+    rw [K_alg_eq_kCMCA_scalar_of_scalar_viability P B C hV]
+    exact kCMCA_pos_of_ne_srrg_fp g hg hlt
+  · intro g hg
+    rw [K_alg_eq_kCMCA_scalar_of_scalar_viability P B C hV]
+    exact kCMCA_zero_iff_eq_srrg_fp g hg
+
+/-- **Pointwise K identification at `g*`** when `T.K ≡ 0` and `K_alg(g*) = 0`. -/
+theorem theory_k_eq_k_alg_at_srrg_fp
+    (T : SrrgTheorySpaceFull ℝ)
+    (P : RepCapacityProfile ℝ) (B : ℝ) (C : ConstraintProfile ℝ)
+    (hK : ∀ s, T.K s = 0)
+    (hV : ScalarCouplingViability P B C) :
+    (T.K srrgFixedPoint : ℝ) = K_alg defaultGTEAtoms P B C srrgFixedPoint ∧
+    Viability P C srrgFixedPoint = B := by
+  refine ⟨?_, viability_barrier_at_srrg_fp P B C hV⟩
+  simp [hK, K_alg_eq_kCMCA_scalar_of_scalar_viability P B C hV, kCMCA, kCMCA_at_srrg_fp]
 
 end SrrgLean.Bridges.ToMDL
