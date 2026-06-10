@@ -7,8 +7,8 @@ import SrrgLean.Connection.H9Bridge
 
 ## Overview
 
-This file formalises the **η-direction RG flow** picture that arises from the
-Genius Team Round 01 analysis (UV–IR bridge session, 2026-05-12).
+This file formalises the **η-direction RG flow** picture arising from the
+UV–IR bridge analysis.
 
 ## The two-fixed-point picture
 
@@ -49,7 +49,7 @@ reinterpreted as the claim that `β_η` of this quadratic form *is* the true SRR
 η-direction flow — i.e., that the SRRG flow projected onto η gives exactly this
 β-function structure.
 
-## Sign correction (Genius Team Round 01 finding)
+## Sign correction
 
 The naïve candidate β_η = −κ(η−IPT)(η−2) has the *wrong sign*: it makes η = 2 the
 IR-stable attractor and η = IPT the UV-repeller.  The correct sign is
@@ -310,7 +310,7 @@ theorem uv_ir_complementarity
 **New fact proved [B], zero sorry:**
 10. `uv_ir_complementarity`      : 6-part complementarity theorem (conditional on h_psc_sc)
 
-**Key sign correction (Genius Team Round 01):**
+**Key sign correction:**
 The candidate β_η = −κ(η−IPT)(η−2) has the WRONG sign and makes η=2 the IR attractor.
 The correct sign is +κ, giving IPT as the IR attractor.  This is now machine-verified
 in `eta_beta_neg_between`, `eta_beta_pos_below_ipt`, and the stability theorems.

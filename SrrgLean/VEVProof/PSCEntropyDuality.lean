@@ -96,7 +96,7 @@ theorem psc_entropy_after_contraction' (ε lam : ℝ) (hε : 0 < ε) (hlam : 0 <
 
 /-! ## §3 — Positivity: ΔS > 0 for any contraction lam ∈ (0,1) -/
 
-/-- **Discharges `psc_entropy_contraction_duality` (open axiom in GoldstoneEntropyCorrection).**
+/-- **Discharges `psc_entropy_contraction_duality` (formerly an open axiom, now a theorem in GoldstoneEntropyCorrection).**
 
     For any lam ∈ (0,1): logb 2 (1/lam) > 0.
 
@@ -137,7 +137,7 @@ theorem psc_entropy_srrg_cycle (ε : ℝ) (hε : 0 < ε) :
 
 /-! ## §5 — Main theorem: discharges srrg_s3_entropy_increase -/
 
-/-- **Discharges `srrg_s3_entropy_increase` (open axiom in GoldstoneEntropyCorrection).**
+/-- **Discharges `srrg_s3_entropy_increase` (formerly an open axiom, now a theorem in GoldstoneEntropyCorrection).**
 
     There exists ΔS such that:
       (a) ΔS = logb 2 φ                   (the entropy increase is log₂(φ))
@@ -180,7 +180,7 @@ theorem per_gen_entropy_eq :
 
 /-- **Summary certificate: all three discharge conditions hold, zero sorry.**
 
-    Bundles the key results confirming that both open axioms in
+    Bundles the key results confirming that both formerly open axioms in
     `GoldstoneEntropyCorrection.lean` are now proved as theorems. -/
 theorem psc_duality_discharge_certificate :
     -- (1) psc_entropy_contraction_duality: ΔS > 0 for lam = 1/φ

@@ -1,7 +1,4 @@
--- SrrgLean — EPIC_047 / P27 formalization root
---
--- Prose specifications live in `ugp-physics` (internal): EPIC_046 `MASTER_STATUS.md`
--- and EPIC_047 `SPEC_047_SRL_SRRG_LEAN.md`.
+-- SrrgLean — P27 formalization root
 
 -- Phase 1 — Core
 import SrrgLean.Core.TheorySpace
@@ -38,16 +35,16 @@ import SrrgLean.VEVProof.EWGoldstoneManifold
 import SrrgLean.VEVProof.EWVacuumBridge
 import SrrgLean.Bridges.ToUGP
 import SrrgLean.Bridges.ToNEMSConfirmations
--- Connection layer (EPIC_046 Y8L / H9)
+-- Connection layer (IPT / H9)
 import SrrgLean.Connection.IPTBridge
 import SrrgLean.Connection.H9Bridge
 import SrrgLean.Connection.GoldenPhiBridge
 import SrrgLean.Connection.UOneBridge
--- Phase 5 — Constants (EPIC_049_SCD)
+-- Phase 5 — Constants
 import SrrgLean.Constants.StrongCP
 import SrrgLean.Constants.GaugeGroupSelection
 import SrrgLean.Constants.GenerationCount
--- Phase 5 cont. — Constants Phase 2 (EPIC_049_SCD Phase 2)
+-- Phase 5 cont. — Constants Phase 2
 import SrrgLean.Constants.BetaFunction
 import SrrgLean.Constants.HiggsQuartic
 import SrrgLean.Constants.CosmologicalConstant

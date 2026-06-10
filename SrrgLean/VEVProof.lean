@@ -1,6 +1,7 @@
 -- VEVProof umbrella module — EW VEV derivation via PSC entropy and S³ Goldstone manifold
--- Graduated from ugp-lean-exp sandbox 2026-05-15; full chain zero-sorry [A/D]
--- EWVacuumBridge added 2026-05-20; upgrades to [A−] (PhysicalSubspace connection closed)
+-- Full chain zero-sorry; psc_ew_entropy_maximization is a proved theorem
+-- (zero open axioms, [A_Lean]). EWVacuumBridge provides the
+-- PhysicalSubspace-conditional bridge ([A−]).
 import SrrgLean.VEVProof.GoldstoneEntropyCorrection
 import SrrgLean.VEVProof.PSCEntropyDuality
 import SrrgLean.VEVProof.EWGoldstoneManifold

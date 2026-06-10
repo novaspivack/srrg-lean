@@ -45,18 +45,19 @@ lake build SrrgLean.VEVProof
 | `SrrgLean.VEVProof.EWGoldstoneManifold` | `VEVProof/EWGoldstoneManifold.lean` | `ew_vacuum_manifold_uniqueness` | EW vacuum manifold = S³, Vol = 2π², 3 Goldstone bosons |
 | `SrrgLean.VEVProof.EWVacuumBridge` | `VEVProof/EWVacuumBridge.lean` | `srrg_physical_fp_implies_ew_vacuum_manifold` | Bridge from PhysicalSubspace U(1) minimality to S³ Goldstone manifold |
 
-**Result:** v_PSC = 246.16 GeV (−0.024% from v_PDG = 246.22 GeV), grade [A−].
+**Result:** v_PSC = 246.16 GeV (−0.024% from v_PDG = 246.22 GeV). The core entropy-maximization chain is grade [A_Lean] (zero open axioms); the PhysicalSubspace-conditional bridge in `EWVacuumBridge` is grade [A−].
 
 **Null-discipline:** 0.35% saturation over 288 structural candidates (structural, not coincidental;
 artifact `null_discipline_vev_formula.json` in `ugp-physics/papers/01_SM/canonical_run/`).
 
-**Open axioms** (grade [A−] not yet [A_Lean]):
-- `psc_entropy_contraction_duality` — general PSC/SRRG duality (est. 2–4 months to prove from first principles)
-- `srrg_s3_entropy_increase` — S³-specific consequence (follows from general duality)
+**Certification status** (zero open axioms in the VEVProof layer):
+- `psc_entropy_contraction_duality` — proved theorem (`PSCEntropyDuality.lean`, zero sorry)
+- `srrg_s3_entropy_increase` — proved theorem (`PSCEntropyDuality.lean`, zero sorry)
+- `psc_ew_entropy_maximization` — proved theorem (`GoldstoneEntropyCorrection.lean` §5, zero sorry, zero new axioms), grade [A_Lean]
+- The `EWVacuumBridge` chain is graded [A−]: conditional on the disclosed [B] PhysicalSubspace axioms and the stated EW-admissibility hypotheses (these enter as hypotheses in theorem signatures, not as open axioms)
 
 ---
 
-## Paper / specs
+## Paper
 
-- Public paper draft target: **P27** (`papers/27_SRRG` on `ugp-physics`).
-- Internal formal specifications: EPIC_046 `MASTER_STATUS.md`; **SPEC_046_R3K, Y8L, Q2N, Z9M, H4P**; EPIC_047 `SPEC_047_SRL_SRRG_LEAN.md`.
+- Paper: **P27** (`papers/27_SRRG` on `ugp-physics`).

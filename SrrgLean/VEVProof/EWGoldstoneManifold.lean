@@ -37,8 +37,8 @@ satisfied over this singleton.
 ## Grade
 
 [A/D]: null-discipline saturation 0.35%, independently motivated ingredients,
-0.024% accuracy (M_ref = 246.16 GeV). Upgrade to [A−] requires connecting this
-manifold identification to the PhysicalSubspace axiom in srrg-lean Lean code.
+0.024% accuracy (M_ref = 246.16 GeV). The connection of this manifold identification
+to the PhysicalSubspace layer is made in `EWVacuumBridge.lean` ([A−]).
 -/
 
 namespace SrrgLean.VEVProof.EWGoldstoneManifold
@@ -130,8 +130,9 @@ theorem ew_vacuum_psc_entropy_well_defined :
     GoldstoneEntropyCorrection.lean (both zero sorry), the full EW VEV derivation
     achieves grade [A/D] (structural derivation, null-discipline saturation 0.35%).
 
-    Path to [A−]: connect this manifold identification to PhysicalSubspace axiom
-    in srrg-lean FixedPoints, closing the Lean gap between O1 and the SRRG layer. -/
+    The connection of this manifold identification to the PhysicalSubspace layer
+    is made in `EWVacuumBridge.lean` ([A−]), closing the Lean gap between O1 and
+    the SRRG layer. -/
 theorem o1_discharge_certificate :
     4 - 1 = 3 ∧
     vol_S3 = 2 * Real.pi ^ 2 ∧ 0 < vol_S3 ∧

@@ -6,20 +6,6 @@ connection to the **Information Profit Threshold (IPT)** programme (P15 / GXT / 
 This repo mirrors the layout of [`ugp-physics-lean`](https://github.com/novaspivack/ugp-physics-lean):
 `SrrgLean/` sources, `paper/` notes, `scripts/`, top-level `lakefile.lean`, `REPRODUCE.md`.
 
-## Internal specification IDs (companion archive `ugp-physics`)
-
-Epic orchestration: **EPIC_046** → `MASTER_STATUS.md` (folder `EPIC_046_SRRG — Self-Referential Renormalization Group and IPT`).
-
-| ID | Topic |
-|----|--------|
-| **SPEC_046_R3K** | GXT ↔ SRRG morphism (frozen v1.0) |
-| **SPEC_046_Y8L** | IPT from SRRG FP — theorem [H1]–[H4] |
-| **SPEC_046_Q2N** | β_SRRG sign / IR vs UV in η |
-| **SPEC_046_Z9M** | CFT ε₃ₛ numerics (Python sandbox) |
-| **SPEC_046_H4P** | Lean formalization targets (this repo, Phase 0) |
-
-Full library architecture: **EPIC_047** → `SPEC_047_SRL_SRRG_LEAN.md`.
-
 ## Modules
 
 | Module | Sorries | Summary |
@@ -36,23 +22,23 @@ Full library architecture: **EPIC_047** → `SPEC_047_SRL_SRRG_LEAN.md`.
 | `Constants.BetaFunction` | 0 | Gauge-coupling proxy Hessian; η_proxy = 2 |
 | `Constants.HiggsQuartic` | 0 | λ_H = m_H²/(2v²) structural recovery |
 | `Constants.CosmologicalConstant` | 0 | Structural exclusion of Planck-scale Λ_vac |
-| `Bridges.*` (5 modules) | 0 | NEMS/PSC → SRRG connection layer |
-| `Connection.*` (4 modules) | 1† | IPT/H9/GoldenPhi/U1 bridges |
+| `Bridges.*` (6 modules) | 0 | NEMS/PSC → SRRG connection layer |
+| `Connection.*` (4 modules) | 0 | IPT/H9/GoldenPhi/U1 bridges |
 | `VEVProof.GoldstoneEntropyCorrection` | 0 | φ^(1/N_gen) SRRG correction to S³ Goldstone volume |
 | `VEVProof.PSCEntropyDuality` | 0 | PSC Entropy-Contraction Duality — core of EW VEV derivation |
 | `VEVProof.EWGoldstoneManifold` | 0 | EW Goldstone manifold S³: 3 bosons, Vol = 2π², O1 discharge |
 | `VEVProof.EWVacuumBridge` | 0 | Bridge: PhysicalSubspace U(1) minimality → S³ Goldstone manifold ([A−]) |
 
-† One `sorry` in `IPTBridge` (hypotheses [H1][H2][H4]; h_psc_sc grade [A−]).
+`IPTBridge` is zero-sorry: the [H1][H2][H4] content enters as the explicit PSC self-consistency hypothesis `h_psc_sc` in its theorem signatures (chain grade [A−]).
 
-**Total: 37 imports, zero sorry in all owned modules except one disclosed axiom in IPTBridge.**
+**Total: 40 imports, zero sorry in all owned modules. Four disclosed physical axioms ([B]) remain in the FixedPoints layer (`PhysicalSubspace`, `BetaEtaQuadratic`).**
 
 ## Status
 
 - **FixedPoints layer**: complete. β_η structure, no-third-zero, Vieta uniqueness, physical subspace axioms, and the new **VEVNoGo** dimensional-transmutation obstruction are all zero-sorry.
 - **Constants layer**: complete. Six derived-constant modules, all zero-sorry.
-- **Connection layer**: `H9Bridge`, `GoldenPhiBridge`, `UOneBridge` are zero-sorry. `IPTBridge` has one explicit `sorry` (h_psc_sc [H4]; grade [A−]).
-- **VEVProof layer**: complete. Four modules zero-sorry: `GoldstoneEntropyCorrection` (algebraic chain |ψ|=1/φ → φ^(1/3) volume correction), `PSCEntropyDuality` (proves `psc_entropy_contraction_duality` and `srrg_s3_entropy_increase` as theorems — discharged Round G1), `EWGoldstoneManifold` (O1 discharge: 3 Goldstone bosons, Vol(S³)=2π²), `EWVacuumBridge` (connects PhysicalSubspace U(1) minimality to S³ Goldstone manifold). Full chain grade [A−]; 1 named open axiom remains: `psc_ew_entropy_maximization` (Lean plumbing gap: connect `EWGoldstoneManifold` to `PhysicalSubspace`). v_PSC = 246.16 GeV (−0.024% from v_PDG = 246.22 GeV).
+- **Connection layer**: complete and zero-sorry (`H9Bridge`, `GoldenPhiBridge`, `UOneBridge`, `IPTBridge`). `IPTBridge` takes the PSC self-consistency condition `h_psc_sc` ([H4]) as an explicit hypothesis in its theorem signatures (chain grade [A−]).
+- **VEVProof layer**: complete. Four modules zero-sorry: `GoldstoneEntropyCorrection` (algebraic chain |ψ|=1/φ → φ^(1/3) volume correction), `PSCEntropyDuality` (proves `psc_entropy_contraction_duality` and `srrg_s3_entropy_increase` as theorems), `EWGoldstoneManifold` (O1 discharge: 3 Goldstone bosons, Vol(S³)=2π²), `EWVacuumBridge` (connects PhysicalSubspace U(1) minimality to S³ Goldstone manifold). Zero open axioms in this layer: `psc_ew_entropy_maximization` is a proved theorem (zero sorry, zero new axioms), grade [A_Lean]. The PhysicalSubspace-conditional bridge in `EWVacuumBridge` is graded [A−] (conditional on the disclosed [B] physical axioms and stated EW-admissibility hypotheses). v_PSC = 246.16 GeV (−0.024% from v_PDG = 246.22 GeV).
 - **Core modules** (`SrrgLean.Core.*`): not yet started; would replace the `sorry` bundle in `IPTBridge`.
 
 ## Layout expectation (sibling checkouts)

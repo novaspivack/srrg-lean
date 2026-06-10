@@ -350,7 +350,7 @@ theorem srrg_op9_k_alg_biconditional
     `d/dg L` (one component of `d/dg K`). -/
 theorem scalar_projection_consistency : True := trivial
 -- Note: the actual scalar connection uses `SRRGCABridge.kCMCA_at_srrg_fp` and
--- `SRRGCABridge.srrg_beta_zero_iff_kCMCA_minimum` from ugp-lean-exp (CatAL).
+-- `SRRGCABridge.srrg_beta_zero_iff_kCMCA_minimum` from ugp-lean (CatAL).
 -- Those theorems together say: the shared zero of β and K_CMCA is g* = 1/φ.
 -- The present module shows this is the scalar projection of the functional result.
 

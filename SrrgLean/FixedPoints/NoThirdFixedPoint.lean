@@ -7,7 +7,7 @@ import SrrgLean.Connection.IPTBridge
 
 ## Overview
 
-This file formalises the Round 02 result that the candidate SRRG β-function
+This file formalises the result that the candidate SRRG β-function
 
     β_η(η) = κ · (η − certifiedIPT) · (η − 2),   κ > 0
 
@@ -161,7 +161,7 @@ Estimated: 3–6 months of Lean functional analysis.
     Physical SRRG fixed points are characterised by `IsGlobalMaxViability M s`.
     The physical condition 0 < M.C s ensures η = R/C is well-defined.
 
-    This hypothesis is the Round 02 replacement for the qualitative statement
+    This hypothesis is the precise replacement for the qualitative statement
     "only two fixed points exist": it names the physical assumption explicitly
     and connects it to the abstract SRRG machinery. -/
 def SrrgPhysicalFixedPointExhaustion {α : Type*} (M : GXtMorphism α) : Prop :=
@@ -245,7 +245,7 @@ theorem srrg_no_uv_fixed_point
 10. `srrg_no_sublp_fixed_point`  : No fixed point below IPT.
 11. `srrg_no_uv_fixed_point`     : No fixed point above 2.
 
-**Round 02 progress:**
+**Status:**
 The "no third fixed point" property is now machine-certified for the CANDIDATE
 β-function [A_Lean] and conditionally certified for the full SRRG [B+].
 The exhaustion hypothesis precisely names what must be proved to close the gap.

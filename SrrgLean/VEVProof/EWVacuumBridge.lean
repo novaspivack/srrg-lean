@@ -253,10 +253,12 @@ theorem ew_vacuum_manifold_from_h_psc_sc
 | psc_ew_entropy_maximization under PhysicalSubspace  | EWVacuumBridge §4   | [A−]     |
 | Chain A: h_psc_sc → S³ vacuum                       | EWVacuumBridge §5   | [A−]     |
 
-**Overall EW VEV derivation grade: [A−]**
-  (upgraded from [A/D] by this bridge file)
+**Overall EW VEV derivation grade: [A_Lean]** — `psc_ew_entropy_maximization` is a
+proved theorem (GoldstoneEntropyCorrection.lean §5; zero sorry, zero open axioms).
+The bridge results in this file are graded [A−]: conditional on the disclosed [B]
+PhysicalSubspace axioms and the stated EW-admissibility hypotheses.
 
-**Remaining gap for [A_Lean]:**
+**Remaining gap for upgrading this bridge to [A_Lean]:**
   Derive `EWAdmissible su2u1_candidate` from SRRG axioms in Lean
   (requires Lie group rank classification — open problem P27 §8.3 OP2).
 -/
@@ -277,7 +279,9 @@ theorem ew_vacuum_manifold_from_h_psc_sc
       Physical fixed-point → EW S³ vacuum (EWVacuumBridge, this file)
 
     Grade: [A−] (conditional on PhysicalSubspace axioms encoding Landauer sustainability
-    and IR-stability). Zero sorry. VEVProof chain zero-sorry as of 2026-05-24 audit.
+    and IR-stability). Zero sorry; the full VEVProof chain is zero-sorry, and
+    `psc_ew_entropy_maximization` is a proved theorem ([A_Lean],
+    GoldstoneEntropyCorrection.lean §5).
 
     All hypotheses are the same as `ew_vacuum_bridge_grade_certificate`. -/
 theorem srrg_higgs_vev_from_fixed_point

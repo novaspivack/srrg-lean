@@ -3,12 +3,12 @@ open Lake DSL
 
 /-! # srrg-lean — Self-Referential Renormalization Group (Lean 4)
 
-Companion to P27 and EPIC_046 / EPIC_047.
+Companion to P27.
 
 ## Dependency strategy
 
-- `ugp-physics-lean` and `ugp-lean` (transitive): **git-pinned** — switched from local path
-  per SPEC_015_LT1 go-live step F. `ugp-physics-lean` is currently private on GitHub.
+- `ugp-physics-lean` and `ugp-lean` (transitive): **git-pinned** (switched from local
+  path). `ugp-physics-lean` is currently private on GitHub.
 - `nems-lean`: **git-pinned** — switching from local-path to git URL is the minimal
   change that resolves the origin conflict with `reflexive-closure-lean`, which also
   requires nems-lean from the same git URL.
@@ -29,7 +29,7 @@ package «srrg-lean» where
 require «nems-lean» from git
   "https://github.com/novaspivack/nems-lean.git" @ "main"
 
--- ugp-physics-lean: git-pinned (switched from local path per SPEC_015_LT1 go-live step F).
+-- ugp-physics-lean: git-pinned (switched from local path).
 -- Note: repo is currently private; local builds work, CI requires public access.
 require «ugp-physics-lean» from git
   "https://github.com/novaspivack/ugp-physics-lean" @ "a2c4eea6265606258c5b595766d16b29eb4bfce6"

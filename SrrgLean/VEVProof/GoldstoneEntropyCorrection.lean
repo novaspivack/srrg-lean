@@ -147,10 +147,10 @@ theorem goldstone_correction_algebraic_chain :
 
 /-- **Per-generation S³ Goldstone volume correction is φ^(1/N_gen).**
 
-    Given the PSC Entropy-Contraction Duality axiom, the effective S³ volume
+    Given the PSC Entropy-Contraction Duality theorem, the effective S³ volume
     correction per generation from one SRRG cycle is φ^(1/N_gen).
 
-    Consequences proved here are all pure algebra given the axiom:
+    Consequences proved here are all pure algebra given the duality theorem:
     (a) V_corr > 1  — the correction is a genuine volume expansion
     (b) log₂(V_corr) = log₂(φ)/N_gen  — per-generation entropy contribution
     (c) 2^(log₂(φ)/N_gen) = V_corr  — the log-to-volume bridge closes the chain

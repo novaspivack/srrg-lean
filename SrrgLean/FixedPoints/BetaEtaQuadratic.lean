@@ -8,7 +8,7 @@ import SrrgLean.Connection.IPTBridge
 
 ## Overview
 
-This file formalises the Round 02 main result:
+This file formalises the following main result:
 
 > **Under the physical fixed-point exhaustion hypothesis, the SRRG β-function for η
 > has exactly two zeros and is therefore of the form κ(η − IPT)(η − 2).**
@@ -39,8 +39,8 @@ fixed points is smooth and the leading approximation between them is the minimal
 polynomial with the correct zeros.  For two isolated zeros of a smooth function, the
 minimal polynomial form is degree 2.
 
-**What this captures:** The "interpolating flow structure" referenced in the Round 01
-open thread OT1.  Combined with the zero-set result (no third fixed point), it pins
+**What this captures:** The interpolating flow structure between the two fixed points.
+Combined with the zero-set result (no third fixed point), it pins
 the quadratic form exactly.
 
 ## Grade assessment
@@ -54,7 +54,7 @@ the quadratic form exactly.
 
 ## Impact on h_psc_sc grade
 
-After Round 02:
+With this file:
 - [A_Lean]: Candidate β has exactly two zeros at IPT and 2 (NoThirdFixedPoint.lean)
 - [A_Lean]: Unique degree-2 polynomial with these zeros is κ(η−IPT)(η−2) (this file)
 - [B+]:     Under two named hypotheses (exhaustion + quadratic minimality),
@@ -176,7 +176,7 @@ theorem eta_beta_minimal_quadratic (kappa : ℝ) :
 the SRRG projected β-function is (approximated by) a degree-2 polynomial with
 leading coefficient κ > 0 and the known zeros.
 
-This replaces the Round 01 `ProxyFaithfulBridge` with a more precise statement
+This replaces the earlier `ProxyFaithfulBridge` with a more precise statement
 that directly uses the algebraic uniqueness theorem above.
 -/
 
@@ -235,7 +235,7 @@ theorem beta_eta_quadratic_form (kappa : ℝ) (srrg_beta : ℝ → ℝ)
     
     Conclude: srrg_beta η = κ(η − IPT)(η − 2) for all η.
 
-    This is the Round 02 main theorem.  Grade [B+].  Zero sorry. -/
+    This is the main theorem of this file.  Grade [B+].  Zero sorry. -/
 theorem beta_eta_quadratic_full
     {α : Type*} (M : GXtMorphism α)
     (_ : SrrgPhysicalFixedPointExhaustion M)
@@ -277,9 +277,9 @@ theorem srrg_uv_unstable (kappa : ℝ) (srrg_beta : ℝ → ℝ)
   eta_uv_unstable kappa hquad.1
 
 /-!
-## § 6. Round 04 — Wilsonian physical axiom for SrrgBetaIsQuadraticHyp
+## § 6. Wilsonian physical axiom for SrrgBetaIsQuadraticHyp
 
-The Wilsonian RG universality argument (Adam, Round 04) provides an explicit physical
+The Wilsonian RG universality argument provides an explicit physical
 motivation for why the SRRG projected β-function should be of degree ≤ 2.
 -/
 
@@ -303,7 +303,7 @@ motivation for why the SRRG projected β-function should be of degree ≤ 2.
     between two isolated fixed points, the leading-order contribution is degree 2.
 
     **(W3) No additional zeros → h = constant.**
-    `SrrgPhysicalFixedPointExhaustion` (Round 03) establishes that the SRRG has
+    `SrrgPhysicalFixedPointExhaustion` (PhysicalSubspace.lean) establishes that the SRRG has
     exactly two fixed points {IPT, 2}.  If β = (η−IPT)(η−2)·h(η) and h has no zeros
     (no additional fixed points), then the simplest non-vanishing h is h = κ (constant).
     Higher-order corrections would make h vary, introducing additional structure that
@@ -374,7 +374,7 @@ theorem wilsonian_implies_quadratic_hyp
 10. `srrg_ipt_stable`                : IPT stable under hypothesis.
 11. `srrg_uv_unstable`               : η = 2 unstable under hypothesis.
 
-**Grade of h_psc_sc after Round 02: [B+ → A−]**
+**Grade of h_psc_sc: [B+ → A−]**
 The quadratic form is now *derived* under two explicitly named, physically motivated
 hypotheses (no third fixed point + polynomial minimality).  These hypotheses replace
 the vague ProxyFaithfulBridge.  The remaining gap is to prove the hypotheses from

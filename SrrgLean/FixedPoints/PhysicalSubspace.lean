@@ -7,9 +7,9 @@ import SrrgLean.Connection.IPTBridge
 /-!
 # Fixed Points — Physical Subspace Constraints
 
-## Overview — Genius Team Round 03
+## Overview
 
-This file formalises the Round 03 result: the **physical subspace constraints** that
+This file formalises the **physical subspace constraints** that
 restrict SRRG fixed points to the efficiency-ratio range [certifiedIPT, 2], and
 (combined with the β-function sign analysis from EtaFlow.lean) discharge
 `SrrgPhysicalFixedPointExhaustion` under two explicit physical axioms.
@@ -34,7 +34,7 @@ The above-η=2 UV instability condition is established algebraically by:
   - `eta_beta_pos_above_uv` [A_Lean]: β_η > 0 for η > 2
   - UV-unstable fixed points have no basin of attraction → not physical
 
-## Round 03 result
+## Main result
 
 **Two named physical axioms** (well-motivated, not tautological):
   1. `srrg_physical_fp_sustainable`: physical fixed points satisfy η ≥ certifiedIPT
@@ -46,7 +46,7 @@ The above-η=2 UV instability condition is established algebraically by:
   PLUS `SrrgBetaIsQuadraticHyp`, physical fixed points have η ∈ {certifiedIPT, 2},
   which IS `SrrgPhysicalFixedPointExhaustion`.
 
-## Grade chain after Round 03
+## Grade chain
 
 | Claim | Grade | Note |
 |-------|-------|------|
@@ -295,14 +295,14 @@ theorem srrg_physical_exhaustion_from_axioms
 /-- **[B→A−] The two physical axioms + `SrrgBetaIsQuadraticHyp` discharge
     `SrrgPhysicalFixedPointExhaustion` — zero sorry.**
 
-    This is the key Round 03 result: `SrrgPhysicalFixedPointExhaustion M` is proved
+    This is the key result of this file: `SrrgPhysicalFixedPointExhaustion M` is proved
     as a theorem under the two named physical axioms plus the Wilsonian polynomial
     minimality hypothesis.
 
-    Before Round 03: `SrrgPhysicalFixedPointExhaustion` was a standalone named
+    Previously, `SrrgPhysicalFixedPointExhaustion` was a standalone named
     hypothesis with no structural justification.
 
-    After Round 03: It is DERIVED from two explicit physical axioms (Landauer
+    Here it is DERIVED from two explicit physical axioms (Landauer
     sustainability and UV stability) and one polynomial minimality axiom.
     The derivation uses [A_Lean] machinery from EtaFlow.lean (sign analysis) and
     a trivial case split.  Zero sorry.
@@ -366,7 +366,7 @@ theorem h_psc_sc_under_physical_axioms
 /-!
 ## Summary
 
-**Round 03 result:** `SrrgPhysicalFixedPointExhaustion` is derived (not just hypothesised)
+**Result:** `SrrgPhysicalFixedPointExhaustion` is derived (not just hypothesised)
 under two named physical axioms (Landauer sustainability + UV stability) and the Wilsonian
 polynomial minimality axiom.  The derivation is zero sorry.
 
@@ -386,18 +386,13 @@ polynomial minimality axiom.  The derivation is zero sorry.
 **Significance:** Three physically named axioms replace the vague `ProxyFaithfulBridge`
 and `SrrgPhysicalFixedPointExhaustion` (standalone hypothesis).  A referee can evaluate
 each axiom independently on physical grounds.
-
----
-
-*Created: Genius Team Round 03, session 2026-05-12.*
-*Extended: Genius Team Round 08, session 2026-05-12 — IPT bridge derivations and IR stability.*
 -/
 
 /-!
-## § 6. Round 08A — Deriving `srrg_physical_fp_sustainable` and `srrg_physical_fp_bounded_above`
+## § 6. Deriving `srrg_physical_fp_sustainable` and `srrg_physical_fp_bounded_above`
           from the h_psc_sc condition [A_Lean]
 
-**Key insight (Adam, Round 08):** When the PSC Landauer self-consistency condition h_psc_sc
+**Key insight:** When the PSC Landauer self-consistency condition h_psc_sc
 holds, the chain `efficiency_at_srrg_stationary_eq_ipt` already gives η = certifiedIPT.
 From this single equation BOTH physical axioms follow by pure algebra — they are NOT
 independent axioms when h_psc_sc is present.
@@ -457,7 +452,7 @@ theorem certifiedIPT_lt_two : certifiedIPT < 2 := by
     (div_lt_one (by linarith)).mpr hlog_ineq
   linarith
 
-/-- **[A_Lean] Round 08A — `srrg_physical_fp_sustainable` is redundant under h_psc_sc.**
+/-- **[A_Lean] `srrg_physical_fp_sustainable` is redundant under h_psc_sc.**
 
     When the PSC Landauer self-consistency condition holds, η = certifiedIPT
     (by `efficiency_at_srrg_stationary_eq_ipt`, zero sorry).  Therefore η ≥ certifiedIPT
@@ -467,7 +462,7 @@ theorem certifiedIPT_lt_two : certifiedIPT < 2 := by
     (the h_psc_sc chain): from an independent physical axiom [B] to a consequence [A_Lean].
     The independent-axiom count for Chain A drops from 3 to 1.
 
-    Chain A (after Round 08): h_psc_sc [H4] → η = certifiedIPT → η ≥ certifiedIPT ∧ η ≤ 2.
+    Chain A: h_psc_sc [H4] → η = certifiedIPT → η ≥ certifiedIPT ∧ η ≤ 2.
     Chain B (Physical Subspace): srrg_physical_fp_sustainable [B axiom] still required. -/
 theorem srrg_physical_fp_sustainable_from_h_psc_sc
     {α : Type*} (M : GXtMorphism α)
@@ -479,7 +474,7 @@ theorem srrg_physical_fp_sustainable_from_h_psc_sc
   -- h_eq : efficiencyRatio M s hC = certifiedIPT
   linarith [h_eq.symm.le]
 
-/-- **[A_Lean] Round 08A — `srrg_physical_fp_bounded_above` is redundant under h_psc_sc.**
+/-- **[A_Lean] `srrg_physical_fp_bounded_above` is redundant under h_psc_sc.**
 
     When h_psc_sc holds, η = certifiedIPT (by IPT bridge), and certifiedIPT < 2
     (by `certifiedIPT_lt_two` [A_Lean]).  Therefore η ≤ 2.
@@ -498,11 +493,11 @@ theorem srrg_physical_fp_bounded_above_from_h_psc_sc
   linarith [certifiedIPT_lt_two, h_eq]
 
 /-!
-## § 7. Round 08B — Deriving `srrg_physical_fp_bounded_above` from UV instability [B+]
+## § 7. Deriving `srrg_physical_fp_bounded_above` from UV instability [B+]
 
 **Independent derivation of the UV bound via IR-stability.**
 
-Rationale (Adam, Round 08): Above η = 2, the β-function is positive [A_Lean].
+Rationale: Above η = 2, the β-function is positive [A_Lean].
 Positive β means the RG flow pushes theories AWAY from fixed points in that region —
 no IR attractor can exist there.  Physical SRRG theories are precisely the IR attractors
 (we observe IR physics, not UV fixed points).  Therefore no physical SRRG fixed point
@@ -579,7 +574,7 @@ axiom srrg_physical_is_ir_stable
     (hphys : IsGlobalMaxViability M s) :
     IsIRStableUnder srrg_beta (efficiencyRatio M s hC)
 
-/-- **[B+] Round 08B — `srrg_physical_fp_bounded_above` derived from IR stability, zero sorry.**
+/-- **[B+] `srrg_physical_fp_bounded_above` derived from IR stability, zero sorry.**
 
     Replaces the [B] axiom `srrg_physical_fp_bounded_above` with a theorem:
       `srrg_physical_is_ir_stable` [B axiom] + `eta_beta_pos_above_uv` [A_Lean]
@@ -614,9 +609,9 @@ theorem srrg_physical_fp_bounded_above_from_ir
   exact (eta_above_uv_is_not_ir_stable κ hκ srrg_beta hquad _ h_gt) h_ir
 
 /-!
-## § 8. Round 08 Summary — Upgraded grade table
+## § 8. Upgraded grade table
 
-| Theorem | Grade (before Rd 08) | Grade (after Rd 08) | Note |
+| Theorem | Grade (before §6–§7) | Grade (after §6–§7) | Note |
 |---------|----------------------|---------------------|------|
 | `srrg_physical_fp_sustainable` | [B] axiom | [B] axiom (still needed in Chain B) | BUT: [A_Lean] in Chain A under h_psc_sc |
 | `srrg_physical_fp_bounded_above` | [B] axiom | [B] axiom (still needed in Chain B) | BUT: [B+] theorem via IR stability; [A_Lean] in Chain A |
@@ -627,7 +622,7 @@ theorem srrg_physical_fp_bounded_above_from_ir
 | `srrg_physical_is_ir_stable` | — | [B] axiom | New; physically transparent IR-attractor premise |
 | `srrg_physical_fp_bounded_above_from_ir` | — | [B+] | New; srrg_physical_is_ir_stable + [A_Lean] → UV bound |
 
-**Net result of Round 08 for h_psc_sc grade:**
+**Net result for h_psc_sc grade:**
 
 Chain A (h_psc_sc route): Now requires only 1 independent physical axiom (h_psc_sc [H4]).
 The two [B] physical subspace axioms are DERIVED as [A_Lean] corollaries.
@@ -637,20 +632,18 @@ Chain B (Physical Subspace route): The UV-stability axiom upgraded from opaque [
 transparent [B] (`srrg_physical_is_ir_stable`) with [B+] derived bound.
 ⟹ Physical Subspace chain is **[B→A−]** (same, but cleaner axiom structure).
 
-**New Lean certification count (Round 08 additions):**
-- 3 new [A_Lean] theorems: `certifiedIPT_lt_two`, `sustainable_from_h_psc_sc`, `bounded_above_from_h_psc_sc`
-- 1 new [B+] theorem: `eta_above_uv_is_not_ir_stable`
-- 1 new [B+] theorem: `srrg_physical_fp_bounded_above_from_ir`
-- 1 new [B] axiom: `srrg_physical_is_ir_stable`
+**Lean certification count (§6–§7):**
+- 3 [A_Lean] theorems: `certifiedIPT_lt_two`, `sustainable_from_h_psc_sc`, `bounded_above_from_h_psc_sc`
+- 1 [B+] theorem: `eta_above_uv_is_not_ir_stable`
+- 1 [B+] theorem: `srrg_physical_fp_bounded_above_from_ir`
+- 1 [B] axiom: `srrg_physical_is_ir_stable`
 - All zero sorry.
-
-*Extended: Genius Team Round 08, session 2026-05-12.*
 -/
 
 /-!
-## § 9. Round GT-B3B4 — Proving B4 from B3 + h_psc_sc [B+]
+## § 9. Proving B4 from B3 + h_psc_sc [B+]
 
-**Key insight (Ninja, GT-B3B4 session 2026-05-27):**
+**Key insight:**
 
 `IsIRStableUnder srrg_beta certifiedIPT` follows directly from
 `SrrgBetaIsQuadraticHyp` via the sign analysis already in EtaFlow.lean.
@@ -746,20 +739,20 @@ theorem srrg_physical_fp_bounded_above_via_ir_and_psc_sc
   exact (eta_above_uv_is_not_ir_stable κ hκ srrg_beta hquad _ h_gt) h_ir
 
 /-!
-## § 9 Summary — Genius Team Round GT-B3B4 (2026-05-27)
+## § 9 Summary
 
-**New [B+] theorems (zero sorry):**
+**[B+] theorems (zero sorry):**
 1. `srrg_ipt_ir_stable_from_quadratic`                     : certifiedIPT is IR-stable under B3
 2. `srrg_physical_is_ir_stable_from_quad_and_psc_sc`       : B4 proved from B3 + h_psc_sc
 3. `srrg_physical_fp_bounded_above_via_ir_and_psc_sc`      : B2 alternative proof via B4
 
-**Grade of B4 after Round GT-B3B4:**
+**Grade of B4:**
 `srrg_physical_is_ir_stable` (the named Lean axiom) is now **superseded** by
 `srrg_physical_is_ir_stable_from_quad_and_psc_sc` [B+, zero sorry].
 B4 is no longer an independent axiom — it is derived from B3 (Wilsonian polynomial)
 and h_psc_sc (1D-reduction).
 
-**Remaining independent axioms for the VEV chain (after this round):**
+**Remaining independent axioms for the VEV chain:**
 1. `srrg_beta_polynomial_leading_order` (B3, Wilsonian) — requires Polchinski RG formalism
 2. h_psc_sc ([H4], 1D-reduction) — requires SRRG functional analysis to derive
 

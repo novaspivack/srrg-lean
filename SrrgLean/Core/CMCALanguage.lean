@@ -17,8 +17,8 @@ This module formalizes:
    and conditional components matching the SRRG MDL structure in `Bridges/ToMDL.lean`.
 4. Interfaces for Turing universality and Kolmogorov–MDL identification.
 
-Reference universality certificate: `phimdl_turing_universal` (ugp-lean-exp, CatAL).
-Reference scalar bridge: `SRRGCABridge.kCMCA` (ugp-lean-exp, CatAL).
+Reference universality certificate: `phimdl_turing_universal` (ugp-lean, CatAL).
+Reference scalar bridge: `SRRGCABridge.kCMCA` (ugp-lean, CatAL).
 -/
 
 namespace SrrgLean.Core.CMCALanguage
@@ -125,9 +125,9 @@ theorem cmca_k_decomp
 
 /-- **CMCA Turing universality** (interface).
 
-    Certified: `phimdl_turing_universal` in ugp-lean-exp (CatAL, zero sorry). -/
+    Certified: `phimdl_turing_universal` in ugp-lean (CatAL, zero sorry). -/
 structure CMCATuringUniversal (α : Type*) (L : CMCAEncodingLanguage α) : Prop where
-  universal : True  -- placeholder pending ugp-lean-exp import bridge
+  universal : True  -- placeholder pending an import bridge to the ugp-lean universality certificate
 
 /-- **Kolmogorov invariance** (up to additive constant) between two CMCA languages. -/
 def KolmogorovInvariance {α : Type*} (L₁ L₂ : CMCAEncodingLanguage α) : Prop :=
@@ -161,7 +161,7 @@ Therefore:
 
 Exact equality `K_CMCA(S) = K_alg(S)` is **not** required for OP9 argmin closure —
 only that the O(1) constant is independent of `S`. CMCA Turing universality
-(`phimdl_turing_universal`, ugp-lean-exp) bounds the GTE→CMCA compiler overhead. -/
+(`phimdl_turing_universal`, ugp-lean) bounds the GTE→CMCA compiler overhead. -/
 
 /-- Default **GTE algebraic atoms** (Lean-certified exact rationals). -/
 structure GTEAtoms where
@@ -577,7 +577,7 @@ theorem theory_k_eq_k_alg_zero_k_at_barrier
 
 /-- Scalar CMCA Kolmogorov: `K_CMCA(g) = -log₂(g² + g)`.
 
-    Matches `SRRGCABridge.kCMCA` (ugp-lean-exp, CatAL). -/
+    Matches `SRRGCABridge.kCMCA` (ugp-lean, CatAL). -/
 noncomputable def kCMCA_scalar (g : ℝ) : ℝ :=
   -Real.logb 2 (g ^ 2 + g)
 

@@ -8,7 +8,7 @@ import SrrgLean.Core.CMCALanguage
 
 Coupling-axis MDL functional `K_CMCA(g) = -log₂(g² + g)` and SRRG β-function
 `β_SRRG(g) = g(1 - g - g²)`. Certified zero-sorry results matching
-`UgpLean.Algebra.SRRGCABridge` (ugp-lean-exp).
+`UgpLean.Algebra.SRRGCABridge` (ugp-lean).
 
 At `g* = 1/φ = srrgFixedPoint`: `K_CMCA(g*) = 0` and `β_SRRG(g*) = 0`.
 For `g > 0`, both vanish iff `g = g*` (unique positive root of `g² + g = 1`).
