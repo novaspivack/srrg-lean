@@ -6,6 +6,19 @@ connection to the **Information Profit Threshold (IPT)** programme (P15 / GXT / 
 This repo mirrors the layout of [`ugp-physics-lean`](https://github.com/novaspivack/ugp-physics-lean):
 `SrrgLean/` sources, `paper/` notes, `scripts/`, top-level `lakefile.lean`, `REPRODUCE.md`.
 
+## Research program
+
+This library is part of the UGP Physics research program by [Nova Spivack](https://www.novaspivack.com/).
+
+| Link | Description |
+|---|---|
+| [Research page](https://www.novaspivack.com/research/) | Full index of all papers, programs, and Lean archives |
+| [UGP Physics programme](https://www.novaspivack.com/research/physics-program) | The UGP Physics research programme |
+| [Complete GTE Framework](https://doi.org/10.5281/zenodo.20560550) | Paper 48 — the synthesis monograph (SRRG result: EW VEV = 246.16 GeV) |
+| [Zenodo program hub](https://doi.org/10.5281/zenodo.20644340) | Citable DOI hub for the UGP Physics program |
+
+---
+
 ## Modules
 
 | Module | Sorries | Summary |
